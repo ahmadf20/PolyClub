@@ -3,13 +3,17 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/room_model.dart';
+import 'package:poly_club/screens/room/call_screen.dart';
 import 'package:poly_club/screens/room/create_edit_room_screen.dart';
 import 'package:poly_club/widgets/buttons/my_text_button.dart';
+import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
+import 'package:poly_club/widgets/modals/user_modal.dart';
 import '../../values/colors.dart';
 import '../../values/const.dart';
 import '../../values/text_style.dart';
 
 import '../buttons/my_icon_button.dart';
+import '../load_image.dart';
 import '../topic_label.dart';
 
 class RoomCard extends StatelessWidget {
@@ -28,6 +32,8 @@ class RoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (room == null) return Container();
 
+    bool isScheduled = (room?.isScheduled ?? false);
+
     return GestureDetector(
       onTap: showDetail
           ? null
@@ -36,10 +42,13 @@ class RoomCard extends StatelessWidget {
                   context: context,
                   enableDrag: true,
                   shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(Const.defaultBRadius)),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(Const.defaultBRadius),
+                      topRight: Radius.circular(Const.defaultBRadius),
+                    ),
+                  ),
                   builder: (context) {
-                    return ModalBottomSheetRoom(
+                    return _ModalBottomSheetRoom(
                       room: room,
                     );
                   });
@@ -65,7 +74,7 @@ class RoomCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      if ((room?.isScheduled ?? false)) ...[
+                      if (isScheduled) ...[
                         Row(
                           children: [
                             Icon(
@@ -92,7 +101,8 @@ class RoomCard extends StatelessWidget {
                         children: [
                           // if (showDetail) ...[
                           MyIconButton(
-                            iconPath: 'assets/icons/icon-room-create.png',
+                            iconPath:
+                                'assets/icons/icon-park-outline_topic.png',
                             radius: Const.mediumBRadius,
                             color: MyColors.secondary,
                             iconColor: MyColors.primary,
@@ -123,7 +133,8 @@ class RoomCard extends StatelessWidget {
                                 if (showDetail) ...[
                                   SizedBox(height: 15),
                                   TopicLabel(
-                                    text: room!.topicId?.toString() ?? '',
+                                    text: room!.topic?.name?.toString() ??
+                                        'Topic',
                                     isSmall: true,
                                   ),
                                 ],
@@ -135,8 +146,8 @@ class RoomCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (room?.isScheduled ?? false) ...[
-                  SizedBox(width: 17),
+                if (isScheduled) ...[
+                  SizedBox(width: 5),
                   MyIconButton(
                     iconPath: 'assets/icons/icon-bell.png',
                     radius: Const.mediumBRadius,
@@ -153,31 +164,36 @@ class RoomCard extends StatelessWidget {
             SizedBox(height: 10),
             Divider(),
             SizedBox(height: 5),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: MyColors.lightGrey,
-                      borderRadius: BorderRadius.circular(100)),
-                  padding: EdgeInsets.all(2.5),
-                  child: Text(
-                    'DS',
-                    style: TextStyle(
-                      fontSize: 8,
+            if (room?.host?.name != null)
+              GestureDetector(
+                onTap: () {
+                  showMyModalBottomSheet(
+                      context, ModalBottomSheetUser(user: room?.host));
+                },
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: loadImage(
+                        room?.host?.avatar,
+                        errorImagePath:
+                            'assets/images/default-profile-picture.png',
+                        height: 20,
+                        width: 20,
+                      ),
                     ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'dwianiSaputri',
-                    style: MyTextStyle.caption.copyWith(
-                      fontSize: showDetail ? 12 : 10,
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        room?.host?.name ?? '-',
+                        style: MyTextStyle.caption.copyWith(
+                          fontSize: showDetail ? 12 : 10,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
           ],
         ),
       ),
@@ -185,8 +201,8 @@ class RoomCard extends StatelessWidget {
   }
 }
 
-class ModalBottomSheetRoom extends StatelessWidget {
-  ModalBottomSheetRoom({
+class _ModalBottomSheetRoom extends StatelessWidget {
+  _ModalBottomSheetRoom({
     Key? key,
     required this.room,
   }) : super(key: key);
@@ -197,6 +213,8 @@ class ModalBottomSheetRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isScheduled = (room?.isScheduled ?? false);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 10, 25, Const.bottomPaddingButton),
       child: Column(
@@ -220,9 +238,15 @@ class ModalBottomSheetRoom extends StatelessWidget {
             children: [
               Expanded(
                 child: MyTextButton(
-                  text: 'Gabung ke Room',
+                  text: isScheduled ? 'Ingatkan' : 'Gabung ke Room',
                   isFullWidth: false,
-                  onPressed: () {},
+                  onPressed: () {
+                    if (isScheduled) {
+                      // profileController.addNotification(room!.id);
+                    } else {
+                      Get.off(() => CallScreen(room: room!));
+                    }
+                  },
                 ),
               ),
               if (profileController.user.value.id == room?.hostId) ...[

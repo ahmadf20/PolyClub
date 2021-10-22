@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:poly_club/models/room_model.dart';
@@ -11,36 +13,46 @@ class RoomController extends GetxController {
   final RxList<Room> allRooms = <Room>[].obs;
   final RxList<Room> myRooms = <Room>[].obs;
   final RxList<Room> recommendedRooms = <Room>[].obs;
+  final RxList<Room> scheduledRooms = <Room>[].obs;
 
-  RxBool isLoading = true.obs;
+  RxBool isLoadingRecommendation = true.obs;
+  RxBool isLoadingAllRoom = true.obs;
+  RxBool isLoadingMyRoom = true.obs;
+  RxBool isLoadingScheduledRooms = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchRooms();
+
+    /// Refresh efery 1 minutes
+    Timer.periodic(Duration(minutes: 1), (Timer t) => fetchRooms());
   }
 
+  // TODO: pull to refresh
   void fetchRooms() {
     fetchAllRoom();
     fetchMyRoom();
     fetchRecommendationRoom();
+    fetchScheduledRoom();
   }
 
-  List<Room> topRooms(RoomListType roomListType, [int length = 3]) {
-    List<Room> rooms = [];
+  List<Room> getRoomsByType(RoomListType roomListType) {
     switch (roomListType) {
       case RoomListType.all:
-        rooms = allRooms;
-        break;
+        return allRooms;
       case RoomListType.mine:
-        rooms = myRooms;
-        break;
+        return myRooms;
       case RoomListType.recommendation:
-        rooms = recommendedRooms;
-        break;
+        return recommendedRooms;
+      case RoomListType.start_time:
+        return scheduledRooms;
       default:
-        rooms = allRooms;
+        return allRooms;
     }
+  }
+
+  List<Room> topRooms(RoomListType type, [int length = 3]) {
+    List<Room> rooms = getRoomsByType(type);
 
     if (rooms.length <= length) return rooms;
     return rooms.sublist(0, length);
@@ -59,7 +71,7 @@ class RoomController extends GetxController {
     } catch (e) {
       customBotToastText(ErrorMessage.general);
     } finally {
-      if (isLoading.value) isLoading.toggle();
+      isLoadingAllRoom.value = false;
     }
   }
 
@@ -76,7 +88,7 @@ class RoomController extends GetxController {
     } catch (e) {
       customBotToastText(ErrorMessage.general);
     } finally {
-      if (isLoading.value) isLoading.toggle();
+      isLoadingMyRoom.value = false;
     }
   }
 
@@ -93,7 +105,24 @@ class RoomController extends GetxController {
     } catch (e) {
       customBotToastText(ErrorMessage.general);
     } finally {
-      if (isLoading.value) isLoading.toggle();
+      isLoadingRecommendation.value = false;
+    }
+  }
+
+  void fetchScheduledRoom() async {
+    try {
+      await RoomService.getAll(RoomListType.start_time).then((res) {
+        if (res is List<Room>) {
+          scheduledRooms.clear();
+          scheduledRooms.addAll(res);
+        } else {
+          customBotToastText(res);
+        }
+      });
+    } catch (e) {
+      customBotToastText(ErrorMessage.general);
+    } finally {
+      isLoadingScheduledRooms.value = false;
     }
   }
 }

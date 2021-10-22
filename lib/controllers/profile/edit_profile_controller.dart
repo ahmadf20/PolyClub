@@ -92,11 +92,19 @@ class EditProfileController extends GetxController {
     }
 
     try {
-      await UserService.updateUserData(data,
-              filepath:
-                  (pickedFilePath.value.isEmpty) ? null : pickedFilePath.value)
-          .then((res) {
-        if (res == true) {
+      if (pickedFilePath.value.isNotEmpty) {
+        await UserService.updateProfilePic(filepath: pickedFilePath.value)
+            .then((res) {
+          if (res is User) {
+            customBotToastText('Foto Profil berhasil diupdate!');
+          } else {
+            customBotToastText(res);
+          }
+        });
+      }
+
+      await UserService.updateUserData(data).then((res) {
+        if (res is User) {
           Get.find<ProfileController>().fetchUserData();
           Get.back();
           customBotToastText('Profil berhasil diupdate!');

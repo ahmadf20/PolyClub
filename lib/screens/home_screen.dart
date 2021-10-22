@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/controllers/room/room_controller.dart';
 import 'package:poly_club/models/room_model.dart';
@@ -7,6 +8,9 @@ import 'package:poly_club/screens/people_screen.dart';
 import 'package:poly_club/screens/profile/profile_screen.dart';
 import 'package:poly_club/screens/room/create_edit_room_screen.dart';
 import 'package:poly_club/values/enums.dart';
+import 'package:poly_club/widgets/error_screen.dart';
+import 'package:poly_club/widgets/load_image.dart';
+import 'package:poly_club/widgets/loading_indicator.dart';
 import 'room/room_list_screen.dart';
 import '../values/colors.dart';
 import '../values/const.dart';
@@ -59,7 +63,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   MyIconButton(
-                    onPressed: () => Get.to(() => PeopleScreen()),
+                    onPressed: () =>
+                        Get.to(() => PeopleScreen(PeopleListType.search)),
                     iconPath: 'assets/icons/icon-search.png',
                     color: MyColors.lighterGrey,
                     iconColor: MyColors.primary,
@@ -73,11 +78,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () => Get.to(() => ProfileScreen()),
+                    onTap: () {
+                      profileController.fetchUserData();
+                      Get.to(() => ProfileScreen());
+                    },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(Const.defaultBRadius),
-                      child: Image.asset(
-                        'assets/images/default-profile-picture.png',
+                      child: loadImage(
+                        profileController.user.value.avatar,
+                        errorImagePath:
+                            'assets/images/default-profile-picture.png',
                         width: 45,
                         height: 45,
                       ),
@@ -95,9 +105,8 @@ class HomeScreen extends StatelessWidget {
                       title: 'Obrolan Terjadwal',
                       padding: EdgeInsets.only(top: 10),
                       onPressed: () {
-                        Get.to(() => ListRoomScreen(
-                              type: RoomListType.all,
-                            ));
+                        Get.to(() =>
+                            ListRoomScreen(type: RoomListType.start_time));
                       },
                     ),
                     Container(
@@ -105,28 +114,43 @@ class HomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: MyColors.lighterGrey,
                         border: Border.all(
-                          color: MyColors.grey,
+                          color: MyColors.lightGrey,
                           width: 0.5,
                         ),
                         borderRadius:
                             BorderRadius.circular(Const.mediumBRadius),
                       ),
-                      child: ListView.builder(
-                        itemCount: 3,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 3.5),
-                            child: Text(
-                              '10.00 - How to survive in your 20s',
-                              style: MyTextStyle.caption,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          );
-                        },
-                      ),
+                      child: roomController.isLoadingScheduledRooms.value
+                          ? MyLoadingIndicator.circular()
+                          : roomController.myRooms.isEmpty
+                              ? Center(
+                                  child: Text(
+                                  'Tidak ada Obrolan Terjadwal saat ini',
+                                  style: MyTextStyle.caption
+                                      .copyWith(color: MyColors.midGrey),
+                                ))
+                              : ListView.builder(
+                                  itemCount: roomController
+                                      .topRooms(RoomListType.start_time)
+                                      .length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    Room item = roomController.topRooms(
+                                        RoomListType.start_time)[index];
+
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 3.5),
+                                      child: Text(
+                                        '${DateFormat('EEE, d MMM - HH:mm WIB', 'id').format(item.startTime!)}: ${item.name}',
+                                        style: MyTextStyle.caption,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    );
+                                  },
+                                ),
                     ),
                     SectionHeader(
                       title: 'Room Saya',
@@ -136,21 +160,37 @@ class HomeScreen extends StatelessWidget {
                             ));
                       },
                     ),
-                    ListView.separated(
-                      itemCount:
-                          roomController.topRooms(RoomListType.mine).length,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 15);
-                      },
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        Room item =
-                            roomController.topRooms(RoomListType.mine)[index];
+                    roomController.isLoadingMyRoom.value
+                        ? MyLoadingIndicator.circular()
+                        : roomController.myRooms.isEmpty
+                            ? ErrorScreen(
+                                title: 'Oops! Kamu belum punya room',
+                                subtitle:
+                                    'Kamu bisa buat room kamu sendiri dengan tap tombol dibawah ini',
+                                buttonText: 'Buat Room',
+                                hasIcon: false,
+                                isCard: true,
+                                icon: Icons.video_collection,
+                                iconButton: Icons.video_call_rounded,
+                                onPressed: () =>
+                                    Get.to(() => CreateRoomEditScreen()),
+                              )
+                            : ListView.separated(
+                                itemCount: roomController
+                                    .topRooms(RoomListType.mine)
+                                    .length,
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(height: 15);
+                                },
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  Room item = roomController
+                                      .topRooms(RoomListType.mine)[index];
 
-                        return RoomCard(room: item);
-                      },
-                    ),
+                                  return RoomCard(room: item);
+                                },
+                              ),
                     SectionHeader(
                       title: 'Rekomendasi',
                       onPressed: () {
@@ -159,22 +199,24 @@ class HomeScreen extends StatelessWidget {
                             ));
                       },
                     ),
-                    ListView.separated(
-                      itemCount: roomController
-                          .topRooms(RoomListType.recommendation)
-                          .length,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 15);
-                      },
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        Room item = roomController
-                            .topRooms(RoomListType.recommendation)[index];
+                    roomController.isLoadingRecommendation.value
+                        ? MyLoadingIndicator.circular()
+                        : ListView.separated(
+                            itemCount: roomController
+                                .topRooms(RoomListType.recommendation)
+                                .length,
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 15);
+                            },
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              Room item = roomController
+                                  .topRooms(RoomListType.recommendation)[index];
 
-                        return RoomCard(room: item);
-                      },
-                    ),
+                              return RoomCard(room: item);
+                            },
+                          ),
                     SectionHeader(
                       title: 'Semua Room',
                       onPressed: () {
@@ -183,21 +225,24 @@ class HomeScreen extends StatelessWidget {
                             ));
                       },
                     ),
-                    ListView.separated(
-                      itemCount:
-                          roomController.topRooms(RoomListType.all).length,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 15);
-                      },
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        Room item =
-                            roomController.topRooms(RoomListType.all)[index];
+                    roomController.isLoadingAllRoom.value
+                        ? MyLoadingIndicator.circular()
+                        : ListView.separated(
+                            itemCount: roomController
+                                .topRooms(RoomListType.all)
+                                .length,
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 15);
+                            },
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              Room item = roomController
+                                  .topRooms(RoomListType.all)[index];
 
-                        return RoomCard(room: item);
-                      },
-                    ),
+                              return RoomCard(room: item);
+                            },
+                          ),
                   ],
                 ),
               ),

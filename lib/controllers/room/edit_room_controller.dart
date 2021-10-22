@@ -157,17 +157,32 @@ class EditRoomController extends GetxController {
     print(data);
 
     try {
-      await RoomService.createRoom(data).then((res) {
-        if (res is Room) {
-          RoomController roomController = Get.find();
-          roomController.fetchRooms();
+      if (isEditing.value) {
+        await RoomService.update(data, detailRoom.value.id!).then((res) {
+          if (res is Room) {
+            RoomController roomController = Get.find();
+            roomController.fetchRooms();
 
-          Get.back();
-          customBotToastText('Room berhasil dibuat');
-        } else {
-          customBotToastText(res);
-        }
-      });
+            Get.back();
+            Get.back();
+            customBotToastText('Room berhasil diupdate');
+          } else {
+            customBotToastText(res);
+          }
+        });
+      } else {
+        await RoomService.createRoom(data).then((res) {
+          if (res is Room) {
+            RoomController roomController = Get.find();
+            roomController.fetchRooms();
+
+            Get.back();
+            customBotToastText('Room berhasil dibuat');
+          } else {
+            customBotToastText(res);
+          }
+        });
+      }
     } catch (e) {
       customBotToastText(ErrorMessage.general);
     } finally {

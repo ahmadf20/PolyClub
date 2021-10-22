@@ -44,8 +44,8 @@ class EditProfileScreen extends StatelessWidget {
                     children: [
                       SizedBox(height: 15),
                       Container(
-                        width: 90,
-                        height: 90,
+                        width: 100,
+                        height: 100,
                         alignment: Alignment.centerLeft,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
@@ -123,20 +123,12 @@ class EditProfileScreen extends StatelessWidget {
         height: 100,
         fit: BoxFit.cover,
       );
-    } else if (s.user.value.avatar != null &&
-        s.user.value.avatar!.isNotEmpty &&
-        !s.user.value.avatar!.contains('null')) {
+    } else {
       return loadImage(
         s.user.value.avatar,
         height: 100,
         width: 100,
-      );
-    } else {
-      return Image.asset(
-        'assets/images/default-profile-picture.png',
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
+        errorImagePath: 'assets/images/default-profile-picture.png',
       );
     }
   }

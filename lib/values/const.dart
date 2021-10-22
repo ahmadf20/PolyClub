@@ -8,7 +8,7 @@ class Const {
   static const double bottomPaddingContentFAB = 90;
 
   /// Value for the bottom padding of buildtin FAB
-  static const double bottomPaddingButton = 50;
+  static const double bottomPaddingButton = 20; //50 for ios
 
   /// Default padding for screen / modals / dialog
   static const double screenPadding = 25;

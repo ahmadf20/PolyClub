@@ -50,6 +50,8 @@ class ProfileController extends GetxController {
         val.topic1 = newUser?.topic1;
         val.topic2 = newUser?.topic2;
         val.topic3 = newUser?.topic3;
+        val.totalFollower = newUser?.totalFollower;
+        val.totalFollowing = newUser?.totalFollowing;
       }
     });
   }

@@ -59,9 +59,9 @@ class MyTextField extends StatelessWidget {
           SizedBox(height: 7),
         ],
         Container(
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+          padding: EdgeInsets.all(7.5),
           decoration: BoxDecoration(
-            color: fillColor ?? Color(0xFFF7F7F7),
+            color: fillColor ?? MyColors.lighterGrey,
             border: Border.all(
               width: 1.00,
               color: MyColors.lightGrey,
@@ -100,17 +100,24 @@ class MyTextField extends StatelessWidget {
               // ),
               floatingLabelBehavior: FloatingLabelBehavior.always,
               fillColor: fillColor ?? MyColors.lighterGrey,
-              contentPadding: EdgeInsets.zero,
+              filled: true,
+              contentPadding: EdgeInsets.all(7.5),
               border: InputBorder.none,
               suffix: suffix,
-              suffixIcon: suffixIcon,
+              suffixIcon: suffixIcon == null
+                  ? null
+                  : Padding(
+                      padding: EdgeInsets.only(right: 7.5),
+                      child: suffixIcon,
+                    ),
               suffixIconConstraints:
                   BoxConstraints(maxHeight: 48, minHeight: 24),
               isDense: true,
               // labelText: label,
               errorText: errorText,
               hintText: hintText,
-              hintStyle: TextStyle(
+              hintStyle: MyTextStyle.body1.copyWith(
+                fontFamily: 'GeneralSans',
                 color: MyColors.grey,
               ),
             ),

@@ -44,6 +44,15 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 
+		<!-- Enable insecure connection (HTTP) -->
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsLocalNetworking</key>
+			<true/>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
+
 		<!-- Permission options for the `mediaLibrary` group -->
 		<key>NSAppleMusicUsageDescription</key>
 		<string>Music!</string>
@@ -56,11 +65,18 @@
 		<key>NSCameraUsageDescription</key>
 		<string>camera</string>
 
+		<!-- handle url launcher -->
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>https</string>
+			<string>http</string>
+		</array>
+
 		<!-- Permission options for the jitsi -->
-		<key>NSCameraUsageDescription</key>
+		<!-- <key>NSCameraUsageDescription</key>
 		<string>$(PRODUCT_NAME) MyApp needs access to your camera for meetings.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>$(PRODUCT_NAME) MyApp needs access to your microphone for meetings.</string>
+		<string>$(PRODUCT_NAME) MyApp needs access to your microphone for meetings.</string> -->
 
 		<!-- Added to fix HTTP issue -->
 		<key>NSAppTransportSecurity</key>

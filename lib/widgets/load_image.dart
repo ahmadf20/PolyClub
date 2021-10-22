@@ -6,7 +6,7 @@ import 'package:poly_club/widgets/loading_indicator.dart';
 
 Widget loadImage(
   String? linkGambar, {
-  bool isShowLoading = true,
+  bool isShowLoading = false,
   Alignment alignment = Alignment.center,
   bool hasErrorWidget = true,
   Color? color,
@@ -14,9 +14,10 @@ Widget loadImage(
   double? width,
   double? height,
   String? baseUrl,
+  String? errorImagePath,
 }) {
   if (linkGambar == null || linkGambar.isEmpty) {
-    return Icon(Icons.error_outline);
+    return _errorWidget(hasErrorWidget, errorImagePath, height, width);
   } else {
     try {
       Widget image = CachedNetworkImage(
@@ -30,16 +31,36 @@ Widget loadImage(
           if (isShowLoading) {
             return MyLoadingIndicator.circular();
           } else {
-            return Container();
+            return (errorImagePath != null
+                ? Image.asset(
+                    errorImagePath,
+                    height: height,
+                    width: width,
+                  )
+                : Icon(Icons.error_outline));
           }
         },
         errorWidget: (context, url, error) =>
-            !hasErrorWidget ? Container() : Icon(Icons.error_outline),
+            _errorWidget(hasErrorWidget, errorImagePath, height, width),
       );
       return image;
     } catch (e) {
       customBotToastText(ErrorMessage.general);
-      return Icon(Icons.error_outline);
+      return _errorWidget(hasErrorWidget, errorImagePath, height, width);
     }
+  }
+}
+
+Widget _errorWidget(bool hasErrorWidget, errorImagePath, height, width) {
+  if (!hasErrorWidget) {
+    return Container();
+  } else {
+    return (errorImagePath != null
+        ? Image.asset(
+            errorImagePath,
+            height: height,
+            width: width,
+          )
+        : Icon(Icons.error_outline));
   }
 }

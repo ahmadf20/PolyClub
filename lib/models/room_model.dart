@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:poly_club/models/topic_model.dart';
+import 'package:poly_club/models/user_model.dart';
+
 Room roomFromJson(String str) => Room.fromJson(json.decode(str));
 
 class Room {
@@ -13,6 +16,8 @@ class Room {
     this.updatedAt,
     this.topicId,
     this.hostId,
+    this.topic,
+    this.host,
   });
 
   String? id;
@@ -24,6 +29,8 @@ class Room {
   String? topicId;
   String? hostId;
   bool? isScheduled;
+  Topic? topic;
+  User? host;
 
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         id: json["id"]?.toString(),
@@ -41,5 +48,7 @@ class Room {
             : DateTime.parse(json["updatedAt"]),
         topicId: json["topic_id"]?.toString(),
         hostId: json["host_id"]?.toString(),
+        topic: json["topic"] == null ? null : Topic.fromJson(json["topic"]),
+        host: json["host"] == null ? null : User.fromJson(json["host"]),
       );
 }

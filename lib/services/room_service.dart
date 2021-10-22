@@ -67,6 +67,35 @@ class RoomService {
     }
   }
 
+  static Future update(Map<String, dynamic> data, String id) async {
+    try {
+      Response res = await dio.put(
+        '/room/single/$id',
+        data: data,
+        options: Options(
+          headers: await getHeader(),
+        ),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return Room.fromJson(res.data['data']);
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
   static Future deleteRoom(String id) async {
     try {
       Response res = await dio.delete(

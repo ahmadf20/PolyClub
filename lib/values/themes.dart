@@ -3,26 +3,28 @@ import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
-ThemeData themeData = ThemeData(
-  primaryColor: MyColors.primary,
-  canvasColor: MyColors.canvas,
-  visualDensity: VisualDensity.adaptivePlatformDensity,
-  fontFamily: 'Poppins',
-  textTheme: TextTheme(
-    subtitle1: TextStyle(
-      fontFamily: 'NunitoSans',
+class MyTheme {
+  static ThemeData themeData = ThemeData(
+    primaryColor: MyColors.primary,
+    canvasColor: MyColors.canvas,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    fontFamily: 'GeneralSans',
+    textTheme: TextTheme(
+      subtitle1: TextStyle(
+        fontFamily: 'GeneralSans',
+      ),
     ),
-  ),
-  colorScheme: ColorScheme.fromSwatch().copyWith(
-    secondary: MyColors.midGrey,
-    primary: MyColors.primary,
-  ),
-);
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      secondary: MyColors.midGrey,
+      primary: MyColors.primary,
+    ),
+  );
 
-SystemUiOverlayStyle mySystemUIOverlaySyle = SystemUiOverlayStyle(
-  systemNavigationBarColor: MyColors.canvas, // navigation bar color
-  systemNavigationBarDividerColor: Colors.black26,
-  systemNavigationBarIconBrightness: Brightness.dark,
-  statusBarIconBrightness: Brightness.dark,
-  statusBarColor: Colors.transparent, // status bar color
-);
+  static SystemUiOverlayStyle mySystemUIOverlaySyle = SystemUiOverlayStyle(
+    systemNavigationBarColor: MyColors.canvas, // navigation bar color
+    systemNavigationBarDividerColor: MyColors.canvas,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent, // status bar
+  );
+}

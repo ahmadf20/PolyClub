@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:poly_club/controllers/profile/edit_profile_controller.dart';
 import 'package:poly_club/controllers/room/edit_room_controller.dart';
 import 'package:poly_club/controllers/topic_controller.dart';
 import 'package:poly_club/models/room_model.dart';
@@ -14,7 +11,6 @@ import 'package:poly_club/values/const.dart';
 import 'package:poly_club/values/text_style.dart';
 import 'package:poly_club/widgets/app_bar.dart';
 import 'package:poly_club/widgets/buttons/my_text_button.dart';
-import 'package:poly_club/widgets/load_image.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
 import 'package:poly_club/widgets/my_text_field.dart';
 import 'package:poly_club/widgets/page_title.dart';
@@ -58,8 +54,11 @@ class CreateRoomEditScreen extends StatelessWidget {
                             context: context,
                             enableDrag: true,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Const.defaultBRadius)),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(Const.defaultBRadius),
+                                topRight: Radius.circular(Const.defaultBRadius),
+                              ),
+                            ),
                             builder: (context) {
                               return ConfirmationDialog();
                             });
@@ -83,19 +82,23 @@ class CreateRoomEditScreen extends StatelessWidget {
                     children: [
                       MyTextField(
                         label: 'Judul',
+                        hintText: 'Judul Room Kamu',
                         controller: s.titleTC,
                       ),
                       SizedBox(height: 10),
                       MyTextField(
                         label: 'Topik',
+                        hintText: 'Topik yang Kamu Inginkan',
                         controller: s.topicTC,
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
                             enableDrag: true,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(Const.defaultBRadius),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(Const.defaultBRadius),
+                                topRight: Radius.circular(Const.defaultBRadius),
+                              ),
                             ),
                             builder: (context) {
                               return TopicList();
@@ -107,6 +110,7 @@ class CreateRoomEditScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       MyTextField(
                         label: 'Deskripsi',
+                        hintText: 'Deskripsi Room Kamu',
                         controller: s.descTC,
                         minLines: 3,
                       ),
@@ -122,6 +126,7 @@ class CreateRoomEditScreen extends StatelessWidget {
                           Expanded(
                             child: MyTextField(
                               label: 'Tanggal',
+                              hintText: 'Tanggal',
                               controller: s.dateTC,
                               enabled: false,
                               onTap: () => s.selectDate(context),
@@ -135,6 +140,7 @@ class CreateRoomEditScreen extends StatelessWidget {
                           Expanded(
                             child: MyTextField(
                               label: 'Waktu',
+                              hintText: 'Waktu',
                               controller: s.timeTC,
                               enabled: false,
                               onTap: () => s.selectTime(context),
@@ -156,32 +162,6 @@ class CreateRoomEditScreen extends StatelessWidget {
         );
       },
     );
-  }
-
-  Widget buildProfileImg(EditProfileController s) {
-    if (s.pickedFilePath.value.isNotEmpty) {
-      return Image.file(
-        File(s.pickedFilePath.value),
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-      );
-    } else if (s.user.value.avatar != null &&
-        s.user.value.avatar!.isNotEmpty &&
-        !s.user.value.avatar!.contains('null')) {
-      return loadImage(
-        s.user.value.avatar,
-        height: 100,
-        width: 100,
-      );
-    } else {
-      return Image.asset(
-        'assets/images/default-profile-picture.png',
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-      );
-    }
   }
 }
 

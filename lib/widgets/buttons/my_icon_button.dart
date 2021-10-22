@@ -42,6 +42,9 @@ class MyIconButton extends StatelessWidget {
               (isOutlined ? Colors.transparent : MyColors.primary),
         ),
         minimumSize: isSmall ? Size(35, 35) : Size(45, 45),
+        tapTargetSize: isSmall
+            ? MaterialTapTargetSize.shrinkWrap
+            : MaterialTapTargetSize.padded,
       ),
       child: Image.asset(
         iconPath,

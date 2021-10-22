@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import 'base_widget.dart';
 import 'services/error_reporting.dart';
+import 'utils/scroll_config.dart';
 import 'values/themes.dart';
 
 Future<void> main() async {
@@ -43,18 +44,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    SystemChrome.setSystemUIOverlayStyle(mySystemUIOverlaySyle);
+    SystemChrome.setSystemUIOverlayStyle(MyTheme.mySystemUIOverlaySyle);
 
     return GetMaterialApp(
       title: 'PolyClub',
       debugShowCheckedModeBanner: false,
-      theme: themeData,
+      theme: MyTheme.themeData,
       locale: Locale('id'),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      scrollBehavior: NoGlowScrollBehaviour(),
       builder: BotToastInit(),
       supportedLocales: [
         const Locale('id'),

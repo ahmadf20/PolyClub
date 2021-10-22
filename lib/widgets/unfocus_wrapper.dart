@@ -39,7 +39,7 @@ class ScreenWrapper extends StatelessWidget {
       child: WillPopScope(
         onWillPop: onWillPop,
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: mySystemUIOverlaySyle,
+          value: MyTheme.mySystemUIOverlaySyle,
           child: Scaffold(
             appBar: !hasAppBar ? null : appBar ?? MyAppBar(onBack: onBack),
             floatingActionButton: floatingActionButton ?? SizedBox.shrink(),

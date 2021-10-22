@@ -49,7 +49,7 @@ class SectionHeader extends StatelessWidget {
                     children: [
                       Text(
                         textButton ?? 'Lihat Semua',
-                        style: MyTextStyle.body2.copyWith(
+                        style: MyTextStyle.caption.copyWith(
                           color: MyColors.midGrey,
                         ),
                       ),

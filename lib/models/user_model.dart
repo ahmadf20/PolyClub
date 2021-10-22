@@ -20,6 +20,8 @@ class User {
     this.topic1,
     this.topic2,
     this.topic3,
+    this.totalFollower,
+    this.totalFollowing,
   });
 
   String? id;
@@ -30,6 +32,9 @@ class User {
   String? email;
   DateTime? createdAt;
   DateTime? updatedAt;
+
+  String? totalFollowing;
+  String? totalFollower;
 
   String? topic1Id;
   String? topic2Id;
@@ -53,7 +58,8 @@ class User {
             : DateTime.parse(json["updatedAt"]),
         topic1Id: json["topic1_id"]?.toString(),
         topic2Id: json["topic2_id"]?.toString(),
-        topic3Id: json["topic3_id"]?.toString(),
+        totalFollowing: json["total_following"]?.toString(),
+        totalFollower: json["total_follower"]?.toString(),
         topic1: json["topic1"] == null ? null : Topic.fromJson(json["topic1"]),
         topic2: json["topic2"] == null ? null : Topic.fromJson(json["topic2"]),
         topic3: json["topic3"] == null ? null : Topic.fromJson(json["topic3"]),

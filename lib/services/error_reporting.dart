@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import '../utils/logger.dart';
 import '../values/const.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
 
 class ErrorReporting {
   static Future initialize() async {

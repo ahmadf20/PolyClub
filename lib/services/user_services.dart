@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:poly_club/models/user_relation_model.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
+import 'package:poly_club/values/enums.dart';
 import '../models/user_model.dart';
 import '../values/const.dart';
 import '../services/dio_configs.dart';
@@ -99,17 +101,47 @@ class UserService {
     }
   }
 
-  static Future updateUserData(
-    Map<String, dynamic> data, {
+  static Future updateUserData(Map<String, dynamic> data) async {
+    try {
+      Response res = await dio.put(
+        '/user/profile/update',
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ${await SharedPrefs.getToken()}',
+        }),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return User.fromJson(res.data['data']);
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  static Future updateProfilePic({
     String? filepath,
   }) async {
     try {
+      Map<String, dynamic> data = {};
+
       if (filepath != null) {
-        data['avatar'] = await MultipartFile.fromFile(filepath);
+        data['image'] = await MultipartFile.fromFile(filepath);
       }
 
       Response res = await Dio().put(
-        '${Const.url}/user/profile/update',
+        '${Const.url}/user/profile/avatar',
         data: FormData.fromMap(data),
         options: Options(headers: {
           'Authorization': 'Bearer ${await SharedPrefs.getToken()}',
@@ -119,6 +151,124 @@ class UserService {
             logger.v((received / total * 100).toStringAsFixed(0) + "%");
           }
         },
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return User.fromJson(res.data['data']);
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  /// [Get Users]
+  static Future getUsers(String keyword) async {
+    try {
+      Response res = await dio.get(
+        '/user/search?name=$keyword',
+        options: Options(headers: await (getHeader())),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return (res.data['data'] as List)
+            .map((val) => User.fromJson(val))
+            .toList();
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  /// [Get User Relationships]
+  ///
+  /// Search users, get followers, get following
+  ///
+  /// type: [PeopleListType]
+  /// keyword: [String] (Optional - for [PeopleListType.search])
+  static Future getRelationship(PeopleListType type, String userId) async {
+    try {
+      Response res = await dio.get(
+        '/user/${type}_by_id/$userId',
+        options: Options(headers: await (getHeader())),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return (res.data['data'] as List)
+            .map((val) => UserRelation.fromJson(val))
+            .toList();
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  static Future addFollowing(String userId) async {
+    try {
+      Response res = await dio.post(
+        'user/follower/add',
+        data: {
+          'following_id': userId,
+        },
+        options: Options(headers: await (getHeader())),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return true;
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  static Future removeFollowing(String userId) async {
+    try {
+      Response res = await dio.delete(
+        'user/follower/unfollows/$userId',
+        options: Options(headers: await (getHeader())),
       );
 
       logger.v(json.decode(res.toString()));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/screens/people_screen.dart';
+import 'package:poly_club/values/enums.dart';
 import 'package:poly_club/widgets/load_image.dart';
 import 'package:poly_club/widgets/page_title.dart';
 import 'setting_screen.dart';
@@ -52,17 +53,14 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Container(
-                          height: 80,
-                          width: 80,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: (s.user.value.avatar?.isNotEmpty ?? false) &&
-                                    s.user.value.avatar != null &&
-                                    !s.user.value.avatar!.contains('null')
-                                ? loadImage(s.user.value.avatar)
-                                : Image.asset(
-                                    'assets/images/default-profile-picture.png'),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: loadImage(
+                            s.user.value.avatar,
+                            errorImagePath:
+                                'assets/images/default-profile-picture.png',
+                            height: 80,
+                            width: 80,
                           ),
                         ),
                       ),
@@ -84,13 +82,14 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => PeopleScreen(title: 'Mengikuti'));
+                              Get.to(
+                                  () => PeopleScreen(PeopleListType.following));
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '10',
+                                  s.user.value.totalFollowing ?? '0',
                                   style: MyTextStyle.bodySemibold1,
                                 ),
                                 SizedBox(width: 5),
@@ -107,13 +106,14 @@ class ProfileScreen extends StatelessWidget {
                           SizedBox(width: 15),
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => PeopleScreen(title: 'Pengikut'));
+                              Get.to(
+                                  () => PeopleScreen(PeopleListType.follower));
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '10',
+                                  s.user.value.totalFollower ?? '0',
                                   style: MyTextStyle.bodySemibold1,
                                 ),
                                 SizedBox(width: 5),
