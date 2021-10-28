@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -16,20 +17,24 @@ class PeopleController extends GetxController {
 
   final Rx<PeopleListType> type = PeopleListType.search.obs;
   final PeopleListType _type;
+  final User _user;
 
-  PeopleController(this._type);
+  PeopleController(this._type, this._user);
 
   @override
   void onInit() {
     super.onInit();
 
     setPeopleType(_type);
-    fetchPeople(_type);
 
     if (type.value != PeopleListType.search) {
+      fetchRelation(_type, _user.id!);
+
       searchTC.addListener(() {
         query.value = searchTC.text;
       });
+    } else {
+      fetchPeople(_type);
     }
   }
 
@@ -75,6 +80,25 @@ class PeopleController extends GetxController {
     }
   }
 
+  void fetchRelation(PeopleListType type, String userId) async {
+    isLoading.value = true;
+
+    try {
+      await UserService.getRelation(type, userId).then((res) {
+        if (res is List<User>) {
+          users.clear();
+          users.addAll(res);
+        } else {
+          customBotToastText(res);
+        }
+      });
+    } catch (e) {
+      customBotToastText(ErrorMessage.general);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   /// Only used for [PeopleListType.search]
   void searchPeople() {
     /// will not search from the hitting the API for non-search type. Instead, it will filter by the text in the search bar
@@ -86,5 +110,65 @@ class PeopleController extends GetxController {
     if (!isLoading.value) isLoading.toggle();
 
     timer = Timer(const Duration(seconds: 1), () => fetchPeople(type.value));
+  }
+
+  void follow(User user) async {
+    BotToast.showLoading();
+
+    try {
+      int userId = int.parse(user.id!);
+      await UserService.addFollowing(userId).then((res) {
+        if (res == true) {
+          int index = users.indexWhere((element) => element.id == user.id);
+          if (index == -1) return;
+
+          User temp = users[index]
+            ..isFollowing = true
+            ..totalFollower =
+                ((int.tryParse(users[index].totalFollower!) ?? 0) + 1)
+                    .toString();
+
+          users[index] = temp;
+
+          customBotToastText('Kamu telah mengikuti @${user.username!}!');
+        } else {
+          customBotToastText(res);
+        }
+      });
+    } catch (e) {
+      customBotToastText(ErrorMessage.general);
+    } finally {
+      BotToast.closeAllLoading();
+    }
+  }
+
+  void unFollow(User user) async {
+    BotToast.showLoading();
+
+    try {
+      await UserService.removeFollowing(user.id!).then((res) {
+        if (res == true) {
+          int index = users.indexWhere((element) => element.id == user.id);
+          if (index == -1) return;
+
+          User temp = users[index]
+            ..isFollowing = false
+            ..totalFollower =
+                ((int.tryParse(users[index].totalFollower!) ?? 0) - 1)
+                    .toString();
+
+          users[index] = temp;
+
+          customBotToastText(
+              'Kamu sudah tidak mengikuti @${user.username!} lagi!');
+        } else {
+          customBotToastText(res);
+        }
+      });
+    } catch (e) {
+      customBotToastText(ErrorMessage.general);
+    } finally {
+      BotToast.closeAllLoading();
+    }
   }
 }

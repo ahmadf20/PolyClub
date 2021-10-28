@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:poly_club/models/user_relation_model.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
 import 'package:poly_club/values/enums.dart';
 import '../models/user_model.dart';
@@ -207,18 +206,20 @@ class UserService {
   ///
   /// type: [PeopleListType]
   /// keyword: [String] (Optional - for [PeopleListType.search])
-  static Future getRelationship(PeopleListType type, String userId) async {
+  static Future getRelation(PeopleListType type, String userId) async {
     try {
       Response res = await dio.get(
-        '/user/${type}_by_id/$userId',
+        '/user/${type.toString().split('.').last}_by_id/$userId',
         options: Options(headers: await (getHeader())),
       );
+
+      print('/user/${type.toString().split('.').last}_by_id/$userId');
 
       logger.v(json.decode(res.toString()));
 
       if (res.data['status'] >= 200 && res.data['status'] < 300) {
         return (res.data['data'] as List)
-            .map((val) => UserRelation.fromJson(val))
+            .map((val) => User.fromJson(val))
             .toList();
       }
       return res.data['message'];
@@ -235,12 +236,12 @@ class UserService {
     }
   }
 
-  static Future addFollowing(String userId) async {
+  static Future addFollowing(int userId) async {
     try {
       Response res = await dio.post(
-        'user/follower/add',
+        '/user/follower/add',
         data: {
-          'following_id': userId,
+          'follower_id': userId,
         },
         options: Options(headers: await (getHeader())),
       );
@@ -267,7 +268,7 @@ class UserService {
   static Future removeFollowing(String userId) async {
     try {
       Response res = await dio.delete(
-        'user/follower/unfollows/$userId',
+        '/unfollows/$userId',
         options: Options(headers: await (getHeader())),
       );
 

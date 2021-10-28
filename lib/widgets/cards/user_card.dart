@@ -10,8 +10,9 @@ import '../modals/user_modal.dart';
 
 class UserCard extends StatelessWidget {
   final User user;
+  final Function? onTap;
 
-  const UserCard(this.user, {Key? key}) : super(key: key);
+  const UserCard(this.user, {Key? key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +58,11 @@ class UserCard extends StatelessWidget {
             ),
             SizedBox(width: 15),
             MyTextButton(
-              text: 'Ikuti',
+              text: user.isFollowing! ? 'Diikuti' : 'Ikuti',
               isFullWidth: false,
               isSmall: true,
-              isOutlined: false,
-              onPressed: () {},
+              isOutlined: user.isFollowing ?? false,
+              onPressed: onTap,
             ),
           ],
         ),

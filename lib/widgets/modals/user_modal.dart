@@ -72,7 +72,10 @@ class ModalBottomSheetUser extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.to(() => PeopleScreen(PeopleListType.following));
+                  Get.to(
+                    () => PeopleScreen(PeopleListType.following, user: user),
+                    preventDuplicates: false,
+                  );
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -95,7 +98,10 @@ class ModalBottomSheetUser extends StatelessWidget {
               SizedBox(width: 15),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => PeopleScreen(PeopleListType.follower));
+                  Get.to(
+                    () => PeopleScreen(PeopleListType.follower, user: user),
+                    preventDuplicates: false,
+                  );
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -142,11 +148,15 @@ class ModalBottomSheetUser extends StatelessWidget {
                 TopicLabel(text: user?.topic3?.name ?? ''),
             ],
           ),
-          SizedBox(height: 25),
-          MyTextButton(
-            text: 'Ikuti',
-            onPressed: () {},
-          ),
+          if (user?.id != profileController.user.value.id) ...[
+            SizedBox(height: 25),
+            MyTextButton(
+              text: user!.isFollowing! ? 'Diikuti' : 'Ikuti',
+              isOutlined: user!.isFollowing ?? false,
+              onPressed: () {},
+              // TODO: get this done
+            ),
+          ],
         ],
       ),
     );

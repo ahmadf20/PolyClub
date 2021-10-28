@@ -22,6 +22,7 @@ class User {
     this.topic3,
     this.totalFollower,
     this.totalFollowing,
+    this.isFollowing,
   });
 
   String? id;
@@ -43,6 +44,8 @@ class User {
   Topic? topic2;
   Topic? topic3;
 
+  bool? isFollowing;
+
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"]?.toString(),
         username: json["username"]?.toString(),
@@ -63,5 +66,6 @@ class User {
         topic1: json["topic1"] == null ? null : Topic.fromJson(json["topic1"]),
         topic2: json["topic2"] == null ? null : Topic.fromJson(json["topic2"]),
         topic3: json["topic3"] == null ? null : Topic.fromJson(json["topic3"]),
+        isFollowing: json["is_follow"] ?? false,
       );
 }

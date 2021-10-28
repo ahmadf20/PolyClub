@@ -59,7 +59,7 @@ class EditRoomController extends GetxController {
 
     titleTC = TextEditingController(text: detailRoom.value.name);
     descTC = TextEditingController(text: detailRoom.value.description);
-    topicTC = TextEditingController(text: 'Topic');
+    topicTC = TextEditingController(text: 'Topic'); //TODO: needs to be changed
 
     topic!.update((val) {
       if (val != null) {

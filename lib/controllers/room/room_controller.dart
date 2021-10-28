@@ -23,6 +23,7 @@ class RoomController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchRooms();
 
     /// Refresh efery 1 minutes
     Timer.periodic(Duration(minutes: 1), (Timer t) => fetchRooms());

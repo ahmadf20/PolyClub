@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/controllers/profile/people_controller.dart';
+import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/user_model.dart';
 import 'package:poly_club/values/colors.dart';
 import 'package:poly_club/values/enums.dart';
@@ -15,8 +16,11 @@ import '../../widgets/unfocus_wrapper.dart';
 class PeopleScreen extends StatelessWidget {
   final String? title;
   final PeopleListType type;
+  final User? user;
 
-  const PeopleScreen(this.type, {Key? key, this.title}) : super(key: key);
+  PeopleScreen(this.type, {Key? key, this.title, this.user}) : super(key: key);
+
+  final ProfileController profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class PeopleScreen extends StatelessWidget {
     }
 
     return GetX<PeopleController>(
-        init: PeopleController(type),
+        init: PeopleController(type, user ?? profileController.user.value),
         builder: (s) {
           return ScreenWrapper(
             child: Padding(
@@ -77,7 +81,14 @@ class PeopleScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       User item = s.filteredUser[index];
 
-                                      return UserCard(item);
+                                      return UserCard(
+                                        item,
+                                        onTap: () {
+                                          item.isFollowing!
+                                              ? s.unFollow(item)
+                                              : s.follow(item);
+                                        },
+                                      );
                                     },
                                   ),
                                 ],
