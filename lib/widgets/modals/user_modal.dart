@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/user_model.dart';
 import 'package:poly_club/screens/people_screen.dart';
+import 'package:poly_club/utils/formatter.dart';
 import 'package:poly_club/values/enums.dart';
 import '../buttons/my_text_button.dart';
 import '../../values/colors.dart';
@@ -48,7 +49,7 @@ class ModalBottomSheetUser extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: loadImage(
                 user?.avatar,
-                errorImagePath: 'assets/images/default-profile-picture.png',
+                initials: Formatter.nameAbbr(user?.name ?? ''),
                 height: 80,
                 width: 80,
               ),

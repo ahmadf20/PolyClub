@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:poly_club/controllers/room/room_controller.dart';
 import 'package:poly_club/models/room_model.dart';
 import 'package:poly_club/models/topic_model.dart';
-import 'package:poly_club/services/room_service.dart';
+import 'package:poly_club/services/API/room_service.dart';
 import 'package:poly_club/utils/custom_bot_toast.dart';
 import 'package:poly_club/values/const.dart';
 
@@ -50,6 +50,7 @@ class EditRoomController extends GetxController {
         val.topicId = room.topicId;
         val.startTime = room.startTime;
         val.isScheduled = room.isScheduled;
+        val.topic = room.topic;
       }
     });
   }
@@ -59,7 +60,7 @@ class EditRoomController extends GetxController {
 
     titleTC = TextEditingController(text: detailRoom.value.name);
     descTC = TextEditingController(text: detailRoom.value.description);
-    topicTC = TextEditingController(text: 'Topic'); //TODO: needs to be changed
+    topicTC = TextEditingController(text: detailRoom.value.topic?.name ?? '-');
 
     topic!.update((val) {
       if (val != null) {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/screens/people_screen.dart';
+import 'package:poly_club/utils/formatter.dart';
 import 'package:poly_club/values/enums.dart';
 import 'package:poly_club/widgets/load_image.dart';
 import 'package:poly_club/widgets/page_title.dart';
+import 'package:share/share.dart';
 import 'setting_screen.dart';
 import '../../values/colors.dart';
 import '../../widgets/app_bar.dart';
@@ -24,6 +26,19 @@ class ProfileScreen extends StatelessWidget {
         return ScreenWrapper(
           appBar: MyAppBar(
             actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.share_outlined,
+                  color: MyColors.darkerGrey,
+                ),
+                onPressed: () {
+                  Share.share(
+                    'Ayo bergabung dengan cara download aplikasi PolyClub sekarang! https://example.com',
+                    //TODO: change this url
+                    subject: 'Look what I made!',
+                  );
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(
@@ -57,8 +72,8 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           child: loadImage(
                             s.user.value.avatar,
-                            errorImagePath:
-                                'assets/images/default-profile-picture.png',
+                            initials:
+                                Formatter.nameAbbr(s.user.value.name ?? ''),
                             height: 80,
                             width: 80,
                           ),

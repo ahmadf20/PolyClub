@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../utils/shared_preferences.dart';
-import '../values/const.dart';
+import '../../utils/shared_preferences.dart';
+import '../../values/const.dart';
 
 BaseOptions options = BaseOptions(
   baseUrl: '${Const.url}',

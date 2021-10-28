@@ -50,6 +50,11 @@
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
               />
+            
+            <!-- Example: Sets all OneSignal notification's accent color to primary color by default.  -->
+            <!-- Color format is in ARGB. -->
+            <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF005FF9" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

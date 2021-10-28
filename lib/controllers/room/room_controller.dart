@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:poly_club/models/room_model.dart';
-import 'package:poly_club/services/room_service.dart';
+import 'package:poly_club/services/API/room_service.dart';
 import 'package:poly_club/values/enums.dart';
 
 import '../../utils/custom_bot_toast.dart';
@@ -26,10 +26,16 @@ class RoomController extends GetxController {
     fetchRooms();
 
     /// Refresh efery 1 minutes
-    Timer.periodic(Duration(minutes: 1), (Timer t) => fetchRooms());
+    Timer.periodic(Duration(minutes: 1), (Timer t) {
+      //TODO: fetch only if user in home page
+      // get current route or handle with state
+
+      if (Get.currentRoute.contains('HomeScreen')) {
+        fetchRooms();
+      }
+    });
   }
 
-  // TODO: pull to refresh
   void fetchRooms() {
     fetchAllRoom();
     fetchMyRoom();

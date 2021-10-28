@@ -6,7 +6,7 @@ import 'package:poly_club/models/topic_model.dart';
 import '../controllers/profile/profile_controller.dart';
 import '../models/user_model.dart';
 import '../screens/home_screen.dart';
-import '../services/topic_service.dart';
+import '../services/API/topic_service.dart';
 import '../utils/custom_bot_toast.dart';
 import '../values/const.dart';
 

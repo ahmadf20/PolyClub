@@ -1,5 +1,7 @@
 class Const {
   static String url = 'https://api-polyclub.herokuapp.com/api';
+  // static String oneSignalAppId = 'aaeb1177-f822-40df-a27f-92d7d1d90bf6';
+  static String oneSignalAppId = '65da08cc-eef6-40eb-b171-b8b574982b7f';
 
   /// To avoid FAB overlapping
   static const double bottomPadding = 65;

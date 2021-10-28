@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
 import 'package:poly_club/values/enums.dart';
-import '../models/user_model.dart';
-import '../values/const.dart';
-import '../services/dio_configs.dart';
-import '../utils/logger.dart';
+import '../../models/user_model.dart';
+import '../../values/const.dart';
+import '../configs/dio_configs.dart';
+import '../../utils/logger.dart';
 
 class UserService {
   static Future login(

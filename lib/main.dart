@@ -8,9 +8,11 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:poly_club/utils/logger.dart';
 
 import 'base_widget.dart';
 import 'services/error_reporting.dart';
+import 'services/one_signal_service.dart';
 import 'utils/scroll_config.dart';
 import 'values/themes.dart';
 
@@ -20,14 +22,18 @@ Future<void> main() async {
       WidgetsFlutterBinding.ensureInitialized();
 
       await LocalPushNotifService.initialize().then((_) {
-        print('Local Push Notif has been initialized!');
+        logger.i('Local Push Notif has been initialized!');
       });
 
       await LocalPushNotifService.createNotificationChannel().then((_) {
-        print('Notification channel has been created!');
+        logger.i('Notification channel has been created!');
       });
 
       await ErrorReporting.initialize();
+
+      await OneSignalService.initialize().then((val) {
+        if (val == true) logger.i('OneSignal has been initialized!');
+      });
 
       // await initializeDateFormatting("id_ID", null).then(
       //   (_) => runApp(MyApp()),

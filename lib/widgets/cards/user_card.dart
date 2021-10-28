@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poly_club/models/user_model.dart';
+import 'package:poly_club/utils/formatter.dart';
 import '../../widgets/buttons/my_text_button.dart';
 import '../../values/colors.dart';
 import '../../values/const.dart';
@@ -30,7 +31,7 @@ class UserCard extends StatelessWidget {
                 user.avatar,
                 height: 50,
                 width: 50,
-                errorImagePath: 'assets/images/default-profile-picture.png',
+                initials: Formatter.nameAbbr(user.name ?? ''),
               ),
             ),
             SizedBox(width: 15),
@@ -45,7 +46,7 @@ class UserCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '@${user.username}',
+                    '${user.username}',
                     style: MyTextStyle.caption.copyWith(
                       color: MyColors.darkGrey,
                       fontWeight: FontWeight.w500,

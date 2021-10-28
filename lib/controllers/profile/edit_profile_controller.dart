@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/user_model.dart';
-import 'package:poly_club/services/user_services.dart';
+import 'package:poly_club/services/API/user_services.dart';
 import 'package:poly_club/utils/custom_bot_toast.dart';
 import 'package:poly_club/utils/logger.dart';
 import 'package:poly_club/values/const.dart';

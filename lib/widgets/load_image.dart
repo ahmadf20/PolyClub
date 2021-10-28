@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:poly_club/utils/custom_bot_toast.dart';
+import 'package:poly_club/values/colors.dart';
 import 'package:poly_club/values/const.dart';
+import 'package:poly_club/values/text_style.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
 
 Widget loadImage(
@@ -15,9 +17,11 @@ Widget loadImage(
   double? height,
   String? baseUrl,
   String? errorImagePath,
+  String? initials,
 }) {
   if (linkGambar == null || linkGambar.isEmpty) {
-    return _errorWidget(hasErrorWidget, errorImagePath, height, width);
+    return _errorWidget(
+        hasErrorWidget, errorImagePath, height, width, initials);
   } else {
     try {
       Widget image = CachedNetworkImage(
@@ -31,36 +35,47 @@ Widget loadImage(
           if (isShowLoading) {
             return MyLoadingIndicator.circular();
           } else {
-            return (errorImagePath != null
-                ? Image.asset(
-                    errorImagePath,
-                    height: height,
-                    width: width,
-                  )
-                : Icon(Icons.error_outline));
+            return _errorWidget(
+                hasErrorWidget, errorImagePath, height, width, initials);
           }
         },
-        errorWidget: (context, url, error) =>
-            _errorWidget(hasErrorWidget, errorImagePath, height, width),
+        errorWidget: (context, url, error) => _errorWidget(
+            hasErrorWidget, errorImagePath, height, width, initials),
       );
       return image;
     } catch (e) {
       customBotToastText(ErrorMessage.general);
-      return _errorWidget(hasErrorWidget, errorImagePath, height, width);
+      return _errorWidget(
+          hasErrorWidget, errorImagePath, height, width, initials);
     }
   }
 }
 
-Widget _errorWidget(bool hasErrorWidget, errorImagePath, height, width) {
+Widget _errorWidget(
+    bool hasErrorWidget, errorImagePath, height, width, String? text) {
   if (!hasErrorWidget) {
     return Container();
   } else {
-    return (errorImagePath != null
-        ? Image.asset(
-            errorImagePath,
-            height: height,
-            width: width,
-          )
-        : Icon(Icons.error_outline));
+    if (errorImagePath != null) {
+      return Image.asset(
+        errorImagePath,
+        height: height,
+        width: width,
+      );
+    } else {
+      return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: MyColors.lightGrey,
+          borderRadius: BorderRadius.circular(Const.smallBRadius),
+        ),
+        child: Center(
+            child: Text(
+          text ?? '',
+          style: MyTextStyle.bodySemibold1.copyWith(fontSize: height / 2.5),
+        )),
+      );
+    }
   }
 }

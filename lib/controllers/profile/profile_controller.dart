@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../../models/user_model.dart';
 import '../../screens/auth_screen.dart';
-import '../../services/user_services.dart';
+import '../../services/API/user_services.dart';
 import '../../utils/custom_bot_toast.dart';
 import '../../utils/shared_preferences.dart';
 import '../../values/const.dart';

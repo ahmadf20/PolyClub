@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:poly_club/models/user_model.dart';
-import 'package:poly_club/services/user_services.dart';
+import 'package:poly_club/services/API/user_services.dart';
 import 'package:poly_club/utils/custom_bot_toast.dart';
 import 'package:poly_club/values/const.dart';
 import 'package:poly_club/values/enums.dart';
@@ -130,7 +130,7 @@ class PeopleController extends GetxController {
 
           users[index] = temp;
 
-          customBotToastText('Kamu telah mengikuti @${user.username!}!');
+          customBotToastText('Kamu telah mengikuti ${user.username!}!');
         } else {
           customBotToastText(res);
         }
@@ -160,7 +160,7 @@ class PeopleController extends GetxController {
           users[index] = temp;
 
           customBotToastText(
-              'Kamu sudah tidak mengikuti @${user.username!} lagi!');
+              'Kamu sudah tidak mengikuti ${user.username!} lagi!');
         } else {
           customBotToastText(res);
         }

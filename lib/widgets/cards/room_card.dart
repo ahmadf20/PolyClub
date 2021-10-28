@@ -5,6 +5,7 @@ import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/room_model.dart';
 import 'package:poly_club/screens/room/call_screen.dart';
 import 'package:poly_club/screens/room/create_edit_room_screen.dart';
+import 'package:poly_club/utils/formatter.dart';
 import 'package:poly_club/widgets/buttons/my_text_button.dart';
 import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
 import 'package:poly_club/widgets/modals/user_modal.dart';
@@ -176,8 +177,7 @@ class RoomCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       child: loadImage(
                         room?.host?.avatar,
-                        errorImagePath:
-                            'assets/images/default-profile-picture.png',
+                        initials: Formatter.nameAbbr(room?.host?.name ?? ''),
                         height: 20,
                         width: 20,
                       ),

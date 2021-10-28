@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/screens/profile/edit_profile_screen.dart';
+import 'package:poly_club/screens/settings/about_us_screen.dart';
 import 'package:poly_club/screens/topic/topic_list_screen.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
 import 'package:poly_club/widgets/page_title.dart';
@@ -30,32 +31,40 @@ class SettingScreen extends StatelessWidget {
                 children: [
                   buildListTile(
                     'Ubah Profil',
+                    Icons.mode_edit_outlined,
                     onTap: () {
                       Get.to(() => EditProfileScreen());
                     },
                   ),
                   buildListTile(
                     'Topik Minat',
+                    Icons.topic_outlined,
                     onTap: () {
                       Get.to(() => TopicListScreen());
                     },
                   ),
                   buildListTile(
                     'Notifikasi',
+                    Icons.edit_notifications_outlined,
                     onTap: () {},
                   ),
                   buildListTile(
                     'Tentang Pengembang',
-                    onTap: () {},
+                    Icons.design_services_outlined,
+                    onTap: () {
+                      Get.to(() => AboutUsScreen());
+                    },
                   ),
                   buildListTile(
                     'Tentang Aplikasi',
+                    Icons.perm_device_information_outlined,
                     onTap: () {
                       Get.to(() => _AboutAppPage());
                     },
                   ),
                   buildListTile(
                     'Bantuan',
+                    Icons.help_outline_rounded,
                     onTap: () {
                       // Get.to(() => _AboutAppPage());
                     },
@@ -80,7 +89,7 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget buildListTile(String title, {Function? onTap}) {
+  Widget buildListTile(String title, IconData icon, {Function? onTap}) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Container(
@@ -91,6 +100,11 @@ class SettingScreen extends StatelessWidget {
             SizedBox(height: 12.5),
             Row(
               children: [
+                Icon(
+                  icon,
+                  color: MyColors.darkGrey,
+                ),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     title,

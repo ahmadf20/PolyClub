@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:poly_club/models/topic_model.dart';
 import 'package:poly_club/models/user_model.dart';
 import 'package:poly_club/values/const.dart';
-import '../../utils/logger.dart';
-import 'dio_configs.dart';
+import '../../../utils/logger.dart';
+import '../configs/dio_configs.dart';
 
 class TopicService {
   static Future getAll() async {

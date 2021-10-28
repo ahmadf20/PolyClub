@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:poly_club/models/room_model.dart';
 import 'package:poly_club/values/const.dart';
 import 'package:poly_club/values/enums.dart';
-import '../../utils/logger.dart';
-import 'dio_configs.dart';
+import '../../../utils/logger.dart';
+import '../configs/dio_configs.dart';
 
 class RoomService {
   static Future getAll(RoomListType roomListType) async {
