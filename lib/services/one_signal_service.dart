@@ -24,12 +24,16 @@ class OneSignalService {
     OneSignal.shared.setExternalUserId(userId);
   }
 
+  static void unsetUserId() {
+    OneSignal.shared.removeExternalUserId();
+  }
+
   static void setConfigs() {
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
       // Display Notification, pass null param for not displaying the notification
-      event.complete(null);
+      event.complete(event.notification);
     });
 
     OneSignal.shared

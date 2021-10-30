@@ -73,7 +73,10 @@ Widget _errorWidget(
         child: Center(
             child: Text(
           text ?? '',
-          style: MyTextStyle.bodySemibold1.copyWith(fontSize: height / 2.5),
+          style: MyTextStyle.bodySemibold1.copyWith(
+            fontSize: height / 2.5,
+            color: MyColors.darkGrey,
+          ),
         )),
       );
     }

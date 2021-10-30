@@ -38,7 +38,7 @@ class ListRoomScreen extends StatelessWidget {
         title = 'Rekomendasi';
         break;
       case RoomListType.start_time:
-        title = 'Obrolan Terjadwal';
+        title = 'Room Terjadwal';
         break;
       default:
     }
@@ -82,24 +82,30 @@ class ListRoomScreen extends StatelessWidget {
                             onPressed: () =>
                                 Get.to(() => CreateRoomEditScreen()),
                           )
-                        : ListView(
-                            padding: EdgeInsets.only(
-                                bottom: Const.bottomPadding, top: 10),
-                            children: [
-                              ListView.separated(
-                                itemCount: rooms.length,
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(height: 15);
-                                },
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  Room item = rooms[index];
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              roomController.fetchRooms();
+                              return Future.value(null);
+                            },
+                            child: ListView(
+                              padding: EdgeInsets.only(
+                                  bottom: Const.bottomPadding, top: 10),
+                              children: [
+                                ListView.separated(
+                                  itemCount: rooms.length,
+                                  separatorBuilder: (context, index) {
+                                    return SizedBox(height: 15);
+                                  },
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    Room item = rooms[index];
 
-                                  return RoomCard(room: item);
-                                },
-                              ),
-                            ],
+                                    return RoomCard(room: item);
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                   ),
                 ],

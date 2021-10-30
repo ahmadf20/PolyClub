@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/controllers/room/room_controller.dart';
 import 'package:poly_club/models/room_model.dart';
+import 'package:poly_club/screens/notification_screen.dart';
 import 'package:poly_club/screens/people_screen.dart';
 import 'package:poly_club/screens/profile/profile_screen.dart';
 import 'package:poly_club/screens/room/create_edit_room_screen.dart';
@@ -12,6 +13,8 @@ import 'package:poly_club/values/enums.dart';
 import 'package:poly_club/widgets/error_screen.dart';
 import 'package:poly_club/widgets/load_image.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
+import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
+import 'package:poly_club/widgets/modals/room_modal.dart';
 import 'room/room_list_screen.dart';
 import '../values/colors.dart';
 import '../values/const.dart';
@@ -72,7 +75,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   MyIconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => NotificationScreen());
+                    },
                     iconPath: 'assets/icons/icon-bell.png',
                     color: MyColors.lighterGrey,
                     iconColor: MyColors.primary,
@@ -108,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                         EdgeInsets.only(bottom: Const.bottomPaddingContentFAB),
                     children: [
                       SectionHeader(
-                        title: 'Obrolan Terjadwal',
+                        title: 'Room Terjadwal',
                         padding: EdgeInsets.only(top: 10),
                         onPressed: () {
                           Get.to(() =>
@@ -128,31 +133,40 @@ class HomeScreen extends StatelessWidget {
                         ),
                         child: roomController.isLoadingScheduledRooms.value
                             ? MyLoadingIndicator.circular()
-                            : roomController.myRooms.isEmpty
+                            : roomController.getReminderRoom.isEmpty
                                 ? Center(
                                     child: Text(
-                                    'Tidak ada Obrolan Terjadwal saat ini',
-                                    style: MyTextStyle.caption
-                                        .copyWith(color: MyColors.midGrey),
-                                  ))
+                                      'Kamu belum punya daftar room terjadwal saat ini.\nTambahkan ke daftar ini dengan cara tekan tombol \'ingatkan\' pada room terjadwal',
+                                      style: MyTextStyle.caption
+                                          .copyWith(color: MyColors.midGrey),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
                                 : ListView.builder(
-                                    itemCount: roomController
-                                        .topRooms(RoomListType.start_time)
-                                        .length,
+                                    itemCount:
+                                        roomController.getReminderRoom.length,
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      Room item = roomController.topRooms(
-                                          RoomListType.start_time)[index];
+                                      Room item =
+                                          roomController.getReminderRoom[index];
 
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 3.5),
-                                        child: Text(
-                                          '${DateFormat('EEE, d MMM - HH:mm WIB', 'id').format(item.startTime!)}: ${item.name}',
-                                          style: MyTextStyle.caption,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
+                                      return GestureDetector(
+                                        onTap: () {
+                                          showMyModalBottomSheet(
+                                            context,
+                                            ModalBottomSheetRoom(room: item),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 3.5),
+                                          child: Text(
+                                            '${DateFormat('EEE, d MMM - HH:mm WIB', 'id').format(item.startTime!)}: ${item.name}',
+                                            style: MyTextStyle.caption,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
                                         ),
                                       );
                                     },
@@ -199,52 +213,25 @@ class HomeScreen extends StatelessWidget {
                                 ),
                       SectionHeader(
                         title: 'Rekomendasi',
-                        onPressed: () {
-                          Get.to(() => ListRoomScreen(
-                                type: RoomListType.recommendation,
-                              ));
-                        },
-                      ),
-                      roomController.isLoadingRecommendation.value
-                          ? MyLoadingIndicator.circular()
-                          : ListView.separated(
-                              itemCount: roomController
-                                  .topRooms(RoomListType.recommendation)
-                                  .length,
-                              separatorBuilder: (context, index) {
-                                return SizedBox(height: 15);
-                              },
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                Room item = roomController.topRooms(
-                                    RoomListType.recommendation)[index];
-
-                                return RoomCard(room: item);
-                              },
-                            ),
-                      SectionHeader(
-                        title: 'Semua Room',
+                        textButton: 'Semua Room',
                         onPressed: () {
                           Get.to(() => ListRoomScreen(
                                 type: RoomListType.all,
                               ));
                         },
                       ),
-                      roomController.isLoadingAllRoom.value
+                      roomController.isLoadingRecommendation.value
                           ? MyLoadingIndicator.circular()
                           : ListView.separated(
-                              itemCount: roomController
-                                  .topRooms(RoomListType.all)
-                                  .length,
+                              itemCount: roomController.recommendedRooms.length,
                               separatorBuilder: (context, index) {
                                 return SizedBox(height: 15);
                               },
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                Room item = roomController
-                                    .topRooms(RoomListType.all)[index];
+                                Room item =
+                                    roomController.recommendedRooms()[index];
 
                                 return RoomCard(room: item);
                               },

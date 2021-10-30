@@ -1,10 +1,15 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:poly_club/screens/profile/edit_profile_screen.dart';
 import 'package:poly_club/screens/settings/about_us_screen.dart';
 import 'package:poly_club/screens/topic/topic_list_screen.dart';
+import 'package:poly_club/services/one_signal_service.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
+import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
 import 'package:poly_club/widgets/page_title.dart';
+import 'package:poly_club/widgets/section_header.dart';
 import '../../values/colors.dart';
 import '../../widgets/buttons/my_text_button.dart';
 import '../../values/const.dart';
@@ -29,46 +34,63 @@ class SettingScreen extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.only(bottom: Const.bottomPadding, top: 10),
                 children: [
-                  buildListTile(
-                    'Ubah Profil',
-                    Icons.mode_edit_outlined,
-                    onTap: () {
-                      Get.to(() => EditProfileScreen());
-                    },
+                  SectionHeader(
+                    title: 'Akun',
+                    showTextButton: false,
+                    isFirst: true,
                   ),
-                  buildListTile(
-                    'Topik Minat',
-                    Icons.topic_outlined,
-                    onTap: () {
-                      Get.to(() => TopicListScreen());
-                    },
+                  _ListTile(
+                      title: 'Ubah Profil',
+                      icon: Icons.mode_edit_outlined,
+                      onTap: () {
+                        Get.to(() => EditProfileScreen());
+                      }),
+                  _ListTile(
+                      title: 'Topik Minat',
+                      icon: Icons.topic_outlined,
+                      onTap: () {
+                        Get.to(() => TopicListScreen());
+                      }),
+                  _ListTile(
+                      title: 'Notifikasi',
+                      icon: Icons.edit_notifications_outlined,
+                      onTap: () {
+                        AppSettings.openNotificationSettings();
+                      }),
+                  SectionHeader(
+                    title: 'Bantuan',
+                    showTextButton: false,
                   ),
-                  buildListTile(
-                    'Notifikasi',
-                    Icons.edit_notifications_outlined,
-                    onTap: () {},
+                  _ListTile(
+                      title: 'Bantuan',
+                      icon: Icons.help_outline_rounded,
+                      onTap: () {
+                        // Get.to(() => _AboutAppPage());
+                      }),
+                  SectionHeader(
+                    title: 'Tentang',
+                    showTextButton: false,
                   ),
-                  buildListTile(
-                    'Tentang Pengembang',
-                    Icons.design_services_outlined,
-                    onTap: () {
-                      Get.to(() => AboutUsScreen());
-                    },
-                  ),
-                  buildListTile(
-                    'Tentang Aplikasi',
-                    Icons.perm_device_information_outlined,
-                    onTap: () {
-                      Get.to(() => _AboutAppPage());
-                    },
-                  ),
-                  buildListTile(
-                    'Bantuan',
-                    Icons.help_outline_rounded,
-                    onTap: () {
-                      // Get.to(() => _AboutAppPage());
-                    },
-                  ),
+                  _ListTile(
+                      title: 'Tentang Pengembang',
+                      icon: Icons.design_services_outlined,
+                      onTap: () {
+                        Get.to(() => AboutUsScreen());
+                      }),
+                  _ListTile(
+                      title: 'Tentang Aplikasi',
+                      icon: Icons.perm_device_information_outlined,
+                      onTap: () {
+                        Get.to(() => _AboutAppPage());
+                      }),
+                  _ListTile(
+                      title: 'Kebijakan Privasi',
+                      icon: Icons.privacy_tip_outlined,
+                      onTap: () {}),
+                  _ListTile(
+                      title: 'Syarat dan Ketentuan',
+                      icon: Icons.list_alt_rounded,
+                      onTap: () {}),
                   SizedBox(height: 50),
                   MyTextButton(
                     text: 'Logout',
@@ -76,6 +98,7 @@ class SettingScreen extends StatelessWidget {
                     textColor: MyColors.red,
                     onPressed: () async {
                       await SharedPrefs.logOut().then((res) {
+                        OneSignalService.unsetUserId();
                         if (res) Get.offAll(() => AuthScreen());
                       });
                     },
@@ -88,8 +111,22 @@ class SettingScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildListTile(String title, IconData icon, {Function? onTap}) {
+class _ListTile extends StatelessWidget {
+  const _ListTile({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.onTap,
+  }) : super(key: key);
+
+  final String title;
+  final IconData icon;
+  final Function? onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Container(

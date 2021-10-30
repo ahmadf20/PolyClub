@@ -25,11 +25,11 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Spacer(flex: 3),
-              Image.asset(
-                'assets/images/welcome-image-1.png',
+              Expanded(
+                child: Image.asset(
+                  'assets/images/welcome-image-1.png',
+                ),
               ),
-              Spacer(flex: 1),
               SizedBox(height: 20),
               Center(
                 child: Text(

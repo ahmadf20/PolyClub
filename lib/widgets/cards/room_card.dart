@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:poly_club/controllers/profile/profile_controller.dart';
+import 'package:poly_club/controllers/room/room_controller.dart';
 import 'package:poly_club/models/room_model.dart';
-import 'package:poly_club/screens/room/call_screen.dart';
-import 'package:poly_club/screens/room/create_edit_room_screen.dart';
 import 'package:poly_club/utils/formatter.dart';
-import 'package:poly_club/widgets/buttons/my_text_button.dart';
 import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
+import 'package:poly_club/widgets/modals/room_modal.dart';
 import 'package:poly_club/widgets/modals/user_modal.dart';
 import '../../values/colors.dart';
 import '../../values/const.dart';
@@ -33,26 +31,17 @@ class RoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (room == null) return Container();
 
-    bool isScheduled = (room?.isScheduled ?? false);
+    bool isScheduled = (room?.isScheduled ?? false) &&
+        room!.startTime!.isAfter(DateTime.now());
 
     return GestureDetector(
       onTap: showDetail
           ? null
           : () {
-              showModalBottomSheet(
-                  context: context,
-                  enableDrag: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(Const.defaultBRadius),
-                      topRight: Radius.circular(Const.defaultBRadius),
-                    ),
-                  ),
-                  builder: (context) {
-                    return _ModalBottomSheetRoom(
-                      room: room,
-                    );
-                  });
+              showMyModalBottomSheet(
+                context,
+                ModalBottomSheetRoom(room: room),
+              );
             },
       child: Container(
         padding: showDetail ? EdgeInsets.zero : EdgeInsets.all(15),
@@ -147,16 +136,24 @@ class RoomCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (isScheduled) ...[
-                  SizedBox(width: 5),
+                SizedBox(width: 5),
+                if (isScheduled && !showDetail) ...[
                   MyIconButton(
                     iconPath: 'assets/icons/icon-bell.png',
                     radius: Const.mediumBRadius,
-                    color: MyColors.lighterGrey,
+                    color: room!.isReminded
+                        ? MyColors.secondary
+                        : MyColors.lighterGrey,
                     iconColor: MyColors.primary,
                     isSmall: true,
                     onPressed: () {
-                      print('bell');
+                      final RoomController roomController = Get.find();
+
+                      if (room!.isReminded) {
+                        roomController.unsetReminder(room!);
+                      } else {
+                        roomController.setReminder(room!);
+                      }
                     },
                   ),
                 ],
@@ -196,75 +193,6 @@ class RoomCard extends StatelessWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ModalBottomSheetRoom extends StatelessWidget {
-  _ModalBottomSheetRoom({
-    Key? key,
-    required this.room,
-  }) : super(key: key);
-
-  final Room? room;
-
-  final ProfileController profileController = Get.find();
-
-  @override
-  Widget build(BuildContext context) {
-    bool isScheduled = (room?.isScheduled ?? false);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 10, 25, Const.bottomPaddingButton),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 3.5,
-            width: 50,
-            decoration: BoxDecoration(
-              color: MyColors.grey,
-              borderRadius: BorderRadius.circular(Const.defaultBRadius),
-            ),
-          ),
-          SizedBox(height: 25),
-          RoomCard(
-            room: room,
-            showDetail: true,
-          ),
-          SizedBox(height: 25),
-          Row(
-            children: [
-              Expanded(
-                child: MyTextButton(
-                  text: isScheduled ? 'Ingatkan' : 'Gabung ke Room',
-                  isFullWidth: false,
-                  onPressed: () {
-                    if (isScheduled) {
-                      // profileController.addNotification(room!.id);
-                    } else {
-                      Get.off(() => CallScreen(room: room!));
-                    }
-                  },
-                ),
-              ),
-              if (profileController.user.value.id == room?.hostId) ...[
-                SizedBox(width: 10),
-                MyTextButton(
-                  isFullWidth: false,
-                  iconPath: 'assets/icons/nav-edit.png',
-                  onPressed: () {
-                    Get.to(
-                      () => CreateRoomEditScreen(room: room),
-                      preventDuplicates: false,
-                    );
-                  },
-                ),
-              ],
-            ],
-          ),
-        ],
       ),
     );
   }

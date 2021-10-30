@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:poly_club/services/API/topic_service.dart';
 import 'package:poly_club/services/one_signal_service.dart';
 import '../models/user_model.dart';
 import '../screens/home_screen.dart';
@@ -74,7 +75,16 @@ class AuthController extends GetxController {
       },
     ).then((res) {
       if (res is User) {
+        // set external user_id to onesignal service
         OneSignalService.setUserId(res.id!);
+
+        // set tag by calling updateTopic
+        TopicService.chooseTopics(<String, dynamic>{
+          'topic1': res.topic1Id,
+          'topic2': res.topic2Id,
+          'topic3': res.topic3Id,
+        });
+
         Get.offAll(() => HomeScreen());
       } else {
         customBotToastText(res);

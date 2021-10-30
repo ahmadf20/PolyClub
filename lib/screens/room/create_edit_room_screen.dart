@@ -12,6 +12,7 @@ import 'package:poly_club/values/text_style.dart';
 import 'package:poly_club/widgets/app_bar.dart';
 import 'package:poly_club/widgets/buttons/my_text_button.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
+import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
 import 'package:poly_club/widgets/my_text_field.dart';
 import 'package:poly_club/widgets/page_title.dart';
 import 'package:poly_club/widgets/section_header.dart';
@@ -50,18 +51,7 @@ class CreateRoomEditScreen extends StatelessWidget {
                         height: 24,
                       ),
                       onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            enableDrag: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(Const.defaultBRadius),
-                                topRight: Radius.circular(Const.defaultBRadius),
-                              ),
-                            ),
-                            builder: (context) {
-                              return ConfirmationDialog();
-                            });
+                        showMyModalBottomSheet(context, ConfirmationDialog());
                       },
                     ),
                   ),
@@ -91,18 +81,10 @@ class CreateRoomEditScreen extends StatelessWidget {
                         hintText: 'Topik yang Kamu Inginkan',
                         controller: s.topicTC,
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            enableDrag: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(Const.defaultBRadius),
-                                topRight: Radius.circular(Const.defaultBRadius),
-                              ),
-                            ),
-                            builder: (context) {
-                              return TopicList();
-                            },
+                          showMyModalBottomSheet(
+                            context,
+                            TopicList(),
+                            isScrollControlled: false,
                           );
                         },
                         enabled: false,

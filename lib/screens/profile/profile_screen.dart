@@ -33,9 +33,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   Share.share(
-                    'Ayo bergabung dengan cara download aplikasi PolyClub sekarang! https://example.com',
+                    'Ayo bergabung dengan cara download aplikasi PolyClub sekarang! https://drive.google.com/drive/folders/1OZ7ThvnBYbFaQLDSQ-AREPpXpbnf2Ki-?usp=sharing',
                     //TODO: change this url
-                    subject: 'Look what I made!',
                   );
                 },
               ),

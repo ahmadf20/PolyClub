@@ -18,6 +18,7 @@ class Room {
     this.hostId,
     this.topic,
     this.host,
+    this.isReminded = false,
   });
 
   String? id;
@@ -29,6 +30,7 @@ class Room {
   String? topicId;
   String? hostId;
   bool? isScheduled;
+  bool isReminded;
   Topic? topic;
   User? host;
 
@@ -37,6 +39,7 @@ class Room {
         name: json["name"]?.toString(),
         description: json["description"]?.toString(),
         isScheduled: json["is_scheduled"],
+        isReminded: json["is_reminded"] ?? false,
         startTime: json["start_time"] == null
             ? null
             : DateTime.parse(json["start_time"]),

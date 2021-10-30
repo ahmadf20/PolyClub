@@ -32,67 +32,75 @@ class AuthScreen extends StatelessWidget {
                       ? 'Masuk untuk memulai'
                       : 'Silakan isi data dibawah ini untuk mendaftar',
                 ),
-                if (!isLogin) ...[
-                  MyTextField(
-                    label: 'Nama Lengkap',
-                    controller: s.nameTC,
-                  ),
-                  SizedBox(height: 10),
-                  MyTextField(
-                    label: 'Alamat Email',
-                    controller: s.emailTC,
-                  ),
-                  SizedBox(height: 10),
-                ],
-                MyTextField(
-                  label: 'Username',
-                  controller: s.usernameTC,
-                ),
                 SizedBox(height: 10),
-                MyTextField(
-                  label: 'Kata Sandi',
-                  controller: s.passwordTC,
-                  obscureText: true,
-                  // suffixIcon: Icon(
-                  //   Icons.remove_red_eye_outlined,
-                  //   color: MyColors.darkGrey,
-                  // ),
-                ),
-                SizedBox(height: 35),
-                MyTextButton(
-                    text: isLogin ? 'Masuk' : 'Daftar',
-                    onPressed: () {
-                      if (s.state == AuthState.login) {
-                        s.loginHandler();
-                      } else {
-                        s.registerHandler();
-                      }
-                    }),
-                SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      isLogin ? 'Belum punya akun?' : 'Sudah punya akun?',
-                      style: MyTextStyle.body2.copyWith(
-                        color: MyColors.darkGrey,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () {
-                        s.changeAuthState(
-                            isLogin ? AuthState.register : AuthState.login);
-                      },
-                      child: Text(
-                        isLogin ? 'Daftar' : 'Masuk',
-                        style: MyTextStyle.body2.copyWith(
-                          color: MyColors.primary,
-                          fontWeight: FontWeight.w600,
+                Expanded(
+                  child: ListView(
+                    children: [
+                      if (!isLogin) ...[
+                        MyTextField(
+                          label: 'Nama Lengkap',
+                          controller: s.nameTC,
                         ),
+                        SizedBox(height: 10),
+                        MyTextField(
+                          label: 'Alamat Email',
+                          controller: s.emailTC,
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                      MyTextField(
+                        label: 'Username',
+                        controller: s.usernameTC,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      MyTextField(
+                        label: 'Kata Sandi',
+                        controller: s.passwordTC,
+                        obscureText: true,
+                        // suffixIcon: Icon(
+                        //   Icons.remove_red_eye_outlined,
+                        //   color: MyColors.darkGrey,
+                        // ),
+                      ),
+                      SizedBox(height: 35),
+                      MyTextButton(
+                          text: isLogin ? 'Masuk' : 'Daftar',
+                          onPressed: () {
+                            if (s.state == AuthState.login) {
+                              s.loginHandler();
+                            } else {
+                              s.registerHandler();
+                            }
+                          }),
+                      SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            isLogin ? 'Belum punya akun?' : 'Sudah punya akun?',
+                            style: MyTextStyle.body2.copyWith(
+                              color: MyColors.darkGrey,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          GestureDetector(
+                            onTap: () {
+                              s.changeAuthState(isLogin
+                                  ? AuthState.register
+                                  : AuthState.login);
+                            },
+                            child: Text(
+                              isLogin ? 'Daftar' : 'Masuk',
+                              style: MyTextStyle.body2.copyWith(
+                                color: MyColors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

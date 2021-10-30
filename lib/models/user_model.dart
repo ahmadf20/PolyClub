@@ -22,7 +22,7 @@ class User {
     this.topic3,
     this.totalFollower,
     this.totalFollowing,
-    this.isFollowing,
+    this.isFollowing = false,
   });
 
   String? id;

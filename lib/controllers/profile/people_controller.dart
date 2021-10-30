@@ -151,13 +151,17 @@ class PeopleController extends GetxController {
           int index = users.indexWhere((element) => element.id == user.id);
           if (index == -1) return;
 
-          User temp = users[index]
-            ..isFollowing = false
-            ..totalFollower =
-                ((int.tryParse(users[index].totalFollower!) ?? 0) - 1)
-                    .toString();
+          if (type.value == PeopleListType.following) {
+            users.removeAt(index);
+          } else {
+            User temp = users[index]
+              ..isFollowing = false
+              ..totalFollower =
+                  ((int.tryParse(users[index].totalFollower!) ?? 0) - 1)
+                      .toString();
 
-          users[index] = temp;
+            users[index] = temp;
+          }
 
           customBotToastText(
               'Kamu sudah tidak mengikuti ${user.username!} lagi!');

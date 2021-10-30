@@ -9,6 +9,7 @@ class SectionHeader extends StatelessWidget {
   final Function? onPressed;
   final EdgeInsets? padding;
   final bool showTextButton;
+  final bool isFirst;
 
   const SectionHeader({
     Key? key,
@@ -18,13 +19,14 @@ class SectionHeader extends StatelessWidget {
     this.padding,
     this.showTextButton = true,
     this.subtitle,
+    this.isFirst = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: padding?.top ?? 25,
+        top: padding?.top ?? (isFirst ? 0 : 25),
         bottom: padding?.bottom ?? 10,
         left: padding?.left ?? 0,
         right: padding?.right ?? 0,

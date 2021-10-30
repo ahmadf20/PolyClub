@@ -26,7 +26,5 @@ Future<Map<String, dynamic>> getHeader([bool hasToken = true]) async {
     header['Authorization'] = 'Bearer ${await SharedPrefs.getToken()}';
   }
 
-  print(header);
-
   return header;
 }

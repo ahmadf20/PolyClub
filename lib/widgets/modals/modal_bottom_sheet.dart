@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:poly_club/values/const.dart';
 
-Future<dynamic> showMyModalBottomSheet(BuildContext context, Widget widget) {
+Future<dynamic> showMyModalBottomSheet(BuildContext context, Widget widget,
+    {bool isScrollControlled = true}) {
   return showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: isScrollControlled,
       enableDrag: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

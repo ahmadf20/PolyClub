@@ -54,7 +54,7 @@ class AboutUsScreen extends StatelessWidget {
     User(
       name: 'Mira Suryani, S.Pd., M.Kom',
       email: 'mira.suryani@unpad.ac.id',
-      bio: '6285320669533',
+      bio: '',
       topic1: Topic(name: 'Pembimbing'),
       username: 'mira.suryani@unpad.ac.id',
       avatar:
@@ -88,8 +88,9 @@ class AboutUsScreen extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: Const.bottomPadding),
                 children: [
                   SectionHeader(
-                    title: 'Tim Utama',
+                    title: 'Tim Inti',
                     showTextButton: false,
+                    isFirst: true,
                   ),
                   for (final user in devs)
                     Padding(

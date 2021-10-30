@@ -16,6 +16,8 @@ import 'services/one_signal_service.dart';
 import 'utils/scroll_config.dart';
 import 'values/themes.dart';
 
+import 'package:timeago/timeago.dart' as timeago;
+
 Future<void> main() async {
   await runZonedGuarded<Future<Null>>(
     () async {
@@ -34,6 +36,8 @@ Future<void> main() async {
       await OneSignalService.initialize().then((val) {
         if (val == true) logger.i('OneSignal has been initialized!');
       });
+
+      timeago.setLocaleMessages('fr', timeago.IdMessages());
 
       // await initializeDateFormatting("id_ID", null).then(
       //   (_) => runApp(MyApp()),

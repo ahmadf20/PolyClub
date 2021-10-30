@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:poly_club/models/notification_model.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
 import 'package:poly_club/values/enums.dart';
 import '../../models/user_model.dart';
@@ -276,6 +277,35 @@ class UserService {
 
       if (res.data['status'] >= 200 && res.data['status'] < 300) {
         return true;
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
+  /// [Get Notifications]
+  static Future getAllNotification() async {
+    try {
+      Response res = await dio.get(
+        '/notification/mine',
+        options: Options(headers: await (getHeader())),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return (res.data['data'] as List)
+            .map((val) => Notif.fromJson(val))
+            .toList();
       }
       return res.data['message'];
     } on DioError catch (e) {
