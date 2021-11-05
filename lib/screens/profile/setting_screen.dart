@@ -1,13 +1,13 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:poly_club/screens/profile/edit_profile_screen.dart';
 import 'package:poly_club/screens/settings/about_us_screen.dart';
+import 'package:poly_club/screens/settings/help_screen.dart';
 import 'package:poly_club/screens/topic/topic_list_screen.dart';
 import 'package:poly_club/services/one_signal_service.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
-import 'package:poly_club/widgets/modals/modal_bottom_sheet.dart';
+import 'package:poly_club/utils/url_launcher_config.dart';
 import 'package:poly_club/widgets/page_title.dart';
 import 'package:poly_club/widgets/section_header.dart';
 import '../../values/colors.dart';
@@ -65,7 +65,7 @@ class SettingScreen extends StatelessWidget {
                       title: 'Bantuan',
                       icon: Icons.help_outline_rounded,
                       onTap: () {
-                        // Get.to(() => _AboutAppPage());
+                        Get.to(() => HelpScreen());
                       }),
                   SectionHeader(
                     title: 'Tentang',
@@ -86,11 +86,15 @@ class SettingScreen extends StatelessWidget {
                   _ListTile(
                       title: 'Kebijakan Privasi',
                       icon: Icons.privacy_tip_outlined,
-                      onTap: () {}),
+                      onTap: () {
+                        UrlLauncherConfig.open(Const.privacyPolicyUrl);
+                      }),
                   _ListTile(
                       title: 'Syarat dan Ketentuan',
                       icon: Icons.list_alt_rounded,
-                      onTap: () {}),
+                      onTap: () {
+                        UrlLauncherConfig.open(Const.termsOfUseUrl);
+                      }),
                   SizedBox(height: 50),
                   MyTextButton(
                     text: 'Logout',

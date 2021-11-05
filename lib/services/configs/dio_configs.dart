@@ -5,8 +5,8 @@ import '../../values/const.dart';
 
 BaseOptions options = BaseOptions(
   baseUrl: '${Const.url}',
-  connectTimeout: 5000,
-  receiveTimeout: 5000,
+  // connectTimeout: 5000,
+  // receiveTimeout: 5000,
   // contentType: Headers.jsonContentType,
   // responseType: ResponseType.json,
 );
