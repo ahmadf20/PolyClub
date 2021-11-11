@@ -101,6 +101,32 @@ class UserService {
     }
   }
 
+  static Future getUserById(String id) async {
+    try {
+      Response res = await dio.get(
+        '/user_by_id/$id',
+        options: Options(headers: await (getHeader())),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 && res.data['status'] < 300) {
+        return User.fromJson(res.data['data'][0]);
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return ErrorMessage.connection;
+      }
+    } catch (e) {
+      logger.e(e);
+      return ErrorMessage.general;
+    }
+  }
+
   static Future updateUserData(Map<String, dynamic> data) async {
     try {
       Response res = await dio.put(
@@ -303,9 +329,12 @@ class UserService {
       logger.v(json.decode(res.toString()));
 
       if (res.data['status'] >= 200 && res.data['status'] < 300) {
-        return (res.data['data'] as List)
-            .map((val) => Notif.fromJson(val))
-            .toList();
+        if (res.data['data'] is List) {
+          return (res.data['data'] as List)
+              .map((val) => Notif.fromJson(val))
+              .toList();
+        }
+        return <Notif>[];
       }
       return res.data['message'];
     } on DioError catch (e) {

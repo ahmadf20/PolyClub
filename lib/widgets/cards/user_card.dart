@@ -59,10 +59,10 @@ class UserCard extends StatelessWidget {
             ),
             SizedBox(width: 15),
             MyTextButton(
-              text: user.isFollowing! ? 'Diikuti' : 'Ikuti',
+              text: user.isFollowing ? 'Diikuti' : 'Ikuti',
               isFullWidth: false,
               isSmall: true,
-              isOutlined: user.isFollowing ?? false,
+              isOutlined: user.isFollowing,
               onPressed: onTap,
             ),
           ],

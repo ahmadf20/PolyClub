@@ -184,7 +184,7 @@ class _UserCard extends StatelessWidget {
             text: 'Detil',
             isFullWidth: false,
             isSmall: true,
-            isOutlined: user.isFollowing ?? false,
+            isOutlined: user.isFollowing,
             onPressed: () {
               showMyModalBottomSheet(
                   context, _ModalBottomSheetUser(user: user));
@@ -279,7 +279,7 @@ class _ModalBottomSheetUser extends StatelessWidget {
           SizedBox(height: 25),
           MyTextButton(
             text: 'Kirim Email',
-            isOutlined: user!.isFollowing ?? false,
+            isOutlined: user!.isFollowing,
             onPressed: () {
               UrlLauncherConfig.open('mailto:${user?.email}');
             },

@@ -38,11 +38,12 @@ class RoomController extends GetxController {
     });
   }
 
-  void fetchRooms() {
-    fetchAllRoom();
-    fetchMyRoom();
-    fetchRecommendationRoom();
-    fetchScheduledRoom();
+  Future fetchRooms() async {
+    await fetchAllRoom();
+    await fetchMyRoom();
+    await fetchRecommendationRoom();
+    await fetchScheduledRoom();
+    return Future.value(true);
   }
 
   List<Room> getRoomsByType(RoomListType roomListType) {
@@ -72,7 +73,7 @@ class RoomController extends GetxController {
           (room.isReminded) || room.hostId == profileController.user.value.id)
       .toList();
 
-  void fetchAllRoom() async {
+  Future fetchAllRoom() async {
     try {
       await RoomService.getAll(RoomListType.all).then((res) {
         if (res is List<Room>) {
@@ -91,7 +92,7 @@ class RoomController extends GetxController {
     }
   }
 
-  void fetchMyRoom() async {
+  Future fetchMyRoom() async {
     try {
       await RoomService.getAll(RoomListType.mine).then((res) {
         if (res is List<Room>) {
@@ -110,7 +111,7 @@ class RoomController extends GetxController {
     }
   }
 
-  void fetchRecommendationRoom() async {
+  Future fetchRecommendationRoom() async {
     try {
       await RoomService.getAll(RoomListType.recommendation).then((res) {
         if (res is List<Room>) {
@@ -129,7 +130,7 @@ class RoomController extends GetxController {
     }
   }
 
-  void fetchScheduledRoom() async {
+  Future fetchScheduledRoom() async {
     try {
       await RoomService.getAll(RoomListType.start_time).then((res) {
         if (res is List<Room>) {

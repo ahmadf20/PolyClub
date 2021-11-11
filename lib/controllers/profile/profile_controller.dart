@@ -16,7 +16,7 @@ class ProfileController extends GetxController {
     super.onInit();
   }
 
-  void fetchUserData() async {
+  Future fetchUserData() async {
     try {
       await UserService.getUser().then((res) {
         if (res is String &&
@@ -30,7 +30,7 @@ class ProfileController extends GetxController {
         } else {
           customBotToastText(res);
         }
-      });
+      }).whenComplete(() => true);
     } catch (e) {
       customBotToastText(ErrorMessage.general);
     } finally {
@@ -52,6 +52,7 @@ class ProfileController extends GetxController {
         val.topic3 = newUser?.topic3;
         val.totalFollower = newUser?.totalFollower;
         val.totalFollowing = newUser?.totalFollowing;
+        val.isFollowing = newUser?.isFollowing ?? false;
       }
     });
   }

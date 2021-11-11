@@ -163,8 +163,7 @@ class PeopleController extends GetxController {
             users[index] = temp;
           }
 
-          customBotToastText(
-              'Kamu sudah tidak mengikuti ${user.username!} lagi!');
+          customBotToastText('Kamu behenti mengikuti ${user.username!}!');
         } else {
           customBotToastText(res);
         }

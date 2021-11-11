@@ -44,7 +44,7 @@ class User {
   Topic? topic2;
   Topic? topic3;
 
-  bool? isFollowing;
+  bool isFollowing = false;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"]?.toString(),

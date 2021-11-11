@@ -105,8 +105,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    roomController.fetchRooms();
-                    return Future.value(null);
+                    return roomController.fetchRooms();
                   },
                   child: ListView(
                     padding:

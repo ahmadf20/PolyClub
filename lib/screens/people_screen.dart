@@ -84,7 +84,7 @@ class PeopleScreen extends StatelessWidget {
                                       return UserCard(
                                         item,
                                         onTap: () {
-                                          if (item.isFollowing!) {
+                                          if (item.isFollowing) {
                                             s.unFollow(item);
                                           } else {
                                             s.follow(item);

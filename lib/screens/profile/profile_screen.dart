@@ -62,115 +62,121 @@ class ProfileScreen extends StatelessWidget {
                   title: 'Profil',
                 ),
                 Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.only(bottom: Const.bottomPadding),
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: loadImage(
-                            s.user.value.avatar,
-                            initials:
-                                Formatter.nameAbbr(s.user.value.name ?? ''),
-                            height: 80,
-                            width: 80,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        s.user.value.name ?? '',
-                        style: MyTextStyle.bodySemibold1,
-                      ),
-                      Text(
-                        s.user.value.username ?? '',
-                        style: MyTextStyle.caption.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: MyColors.darkGrey,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                  () => PeopleScreen(PeopleListType.following));
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  s.user.value.totalFollowing ?? '0',
-                                  style: MyTextStyle.bodySemibold1,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Mengikuti',
-                                  style: MyTextStyle.body2.copyWith(
-                                    color: MyColors.darkGrey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+                  child: RefreshIndicator(
+                    displacement: 0,
+                    onRefresh: () async {
+                      return s.fetchUserData();
+                    },
+                    child: ListView(
+                      padding: EdgeInsets.only(bottom: Const.bottomPadding),
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: loadImage(
+                              s.user.value.avatar,
+                              initials:
+                                  Formatter.nameAbbr(s.user.value.name ?? ''),
+                              height: 80,
+                              width: 80,
                             ),
                           ),
-                          SizedBox(width: 15),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                  () => PeopleScreen(PeopleListType.follower));
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  s.user.value.totalFollower ?? '0',
-                                  style: MyTextStyle.bodySemibold1,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Pengikut',
-                                  style: MyTextStyle.body2.copyWith(
-                                    color: MyColors.darkGrey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Bio',
-                        style: MyTextStyle.bodySemibold1,
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        s.user.value.bio ?? '-',
-                        style: MyTextStyle.body2.copyWith(
-                          color: MyColors.darkGrey,
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                      SizedBox(height: 15),
-                      Wrap(
-                        spacing: 10,
-                        children: [
-                          if (s.user.value.topic1 != null)
-                            TopicLabel(text: s.user.value.topic1?.name ?? ''),
-                          if (s.user.value.topic2 != null)
-                            TopicLabel(text: s.user.value.topic2?.name ?? ''),
-                          if (s.user.value.topic3 != null)
-                            TopicLabel(text: s.user.value.topic3?.name ?? ''),
-                        ],
-                      ),
-                      SizedBox(height: 25),
-                      Divider(),
-                    ],
+                        SizedBox(height: 20),
+                        Text(
+                          s.user.value.name ?? '',
+                          style: MyTextStyle.bodySemibold1,
+                        ),
+                        Text(
+                          s.user.value.username ?? '',
+                          style: MyTextStyle.caption.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: MyColors.darkGrey,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() =>
+                                    PeopleScreen(PeopleListType.following));
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    s.user.value.totalFollowing ?? '0',
+                                    style: MyTextStyle.bodySemibold1,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Mengikuti',
+                                    style: MyTextStyle.body2.copyWith(
+                                      color: MyColors.darkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() =>
+                                    PeopleScreen(PeopleListType.follower));
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    s.user.value.totalFollower ?? '0',
+                                    style: MyTextStyle.bodySemibold1,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Pengikut',
+                                    style: MyTextStyle.body2.copyWith(
+                                      color: MyColors.darkGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Bio',
+                          style: MyTextStyle.bodySemibold1,
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          s.user.value.bio ?? '-',
+                          style: MyTextStyle.body2.copyWith(
+                            color: MyColors.darkGrey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Wrap(
+                          spacing: 10,
+                          children: [
+                            if (s.user.value.topic1 != null)
+                              TopicLabel(text: s.user.value.topic1?.name ?? ''),
+                            if (s.user.value.topic2 != null)
+                              TopicLabel(text: s.user.value.topic2?.name ?? ''),
+                            if (s.user.value.topic3 != null)
+                              TopicLabel(text: s.user.value.topic3?.name ?? ''),
+                          ],
+                        ),
+                        SizedBox(height: 25),
+                        Divider(),
+                      ],
+                    ),
                   ),
                 ),
               ],
