@@ -139,6 +139,13 @@ class EditRoomController extends GetxController {
       return;
     }
 
+    if (selectedDate!
+        .add(Duration(hours: selectedTime!.hour, minutes: selectedTime!.minute))
+        .isBefore(DateTime.now())) {
+      customBotToastText('Jadwal yang kamu pilih sudah lewat!');
+      return;
+    }
+
     BotToast.showLoading();
 
     Map<String, dynamic> data = {

@@ -136,8 +136,18 @@ class RoomController extends GetxController {
         if (res is List<Room>) {
           scheduledRooms.clear();
           res.sort((a, b) => a.startTime!.compareTo(b.startTime!));
-          res.removeWhere(
-              (element) => element.startTime!.isBefore(DateTime.now()));
+          res.removeWhere((element) {
+            if (element.startTime == null) return true;
+
+            DateTime time = DateTime(
+                element.startTime!.year,
+                element.startTime!.month,
+                element.startTime!.day,
+                element.startTime!.hour,
+                element.startTime!.minute);
+
+            return time.isBefore(DateTime.now());
+          });
           scheduledRooms.addAll(res);
         } else {
           customBotToastText(res);

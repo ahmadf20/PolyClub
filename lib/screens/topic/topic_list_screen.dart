@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/controllers/topic_controller.dart';
 import 'package:poly_club/models/topic_model.dart';
-import 'package:poly_club/screens/home_screen.dart';
 import 'package:poly_club/screens/topic/topic_card.dart';
-import 'package:poly_club/widgets/app_bar.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
 import 'package:poly_club/widgets/page_title.dart';
-import '../../values/colors.dart';
 import '../../values/const.dart';
-import '../../values/text_style.dart';
 import '../../widgets/buttons/my_text_button.dart';
 import '../../widgets/unfocus_wrapper.dart';
 
@@ -27,29 +23,6 @@ class TopicListScreen extends StatelessWidget {
       init: TopicController(),
       builder: (s) {
         return ScreenWrapper(
-          appBar: MyAppBar(
-            actions: [
-              if (isFromRegister)
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: GestureDetector(
-                      child: Text(
-                        'Lewati',
-                        style: MyTextStyle.body2.copyWith(
-                          color: MyColors.darkGrey,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onTap: () {
-                        Get.to(() => HomeScreen());
-                      },
-                    ),
-                  ),
-                ),
-            ],
-          ),
           floatingActionButton: MyTextButton(
             text: 'Pilih Topik (${s.selectedTopicIds.length}/3)',
             isFullWidth: true,

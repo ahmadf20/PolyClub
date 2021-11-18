@@ -30,6 +30,11 @@ class AuthController extends GetxController {
       TextEditingController(text: kDebugMode ? 'ahmadf20' : '');
   TextEditingController passwordTC =
       TextEditingController(text: kDebugMode ? 'admin123' : '');
+  TextEditingController passwordConfirmTC =
+      TextEditingController(text: kDebugMode ? 'admin123' : '');
+
+  final RxBool passwordVisible = false.obs;
+  final RxBool passwordConfirmVisible = false.obs;
 
   @override
   void onInit() {
@@ -47,6 +52,7 @@ class AuthController extends GetxController {
     nameTC.dispose();
     usernameTC.dispose();
     passwordTC.dispose();
+    passwordConfirmTC.dispose();
   }
 
   void changeAuthState(AuthState state) {
@@ -61,6 +67,7 @@ class AuthController extends GetxController {
     nameTC.clear();
     usernameTC.clear();
     passwordTC.clear();
+    passwordConfirmTC.clear();
   }
 
   Future loginHandler() async {
@@ -95,8 +102,17 @@ class AuthController extends GetxController {
   Future registerHandler() async {
     if (usernameTC.text.isEmpty ||
         passwordTC.text.isEmpty ||
+        passwordConfirmTC.text.isEmpty ||
         nameTC.text.isEmpty ||
-        emailTC.text.isEmpty) return;
+        emailTC.text.isEmpty) {
+      customBotToastText('Silakan isi semua form yang tersedia');
+      return;
+    }
+
+    if (passwordConfirmTC.text != passwordTC.text) {
+      customBotToastText('Konfirmasi password tidak sesuai');
+      return;
+    }
 
     BotToast.showLoading();
     Map<String, dynamic> data = {

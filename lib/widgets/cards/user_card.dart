@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:poly_club/controllers/profile/profile_controller.dart';
 import 'package:poly_club/models/user_model.dart';
 import 'package:poly_club/utils/formatter.dart';
 import '../../widgets/buttons/my_text_button.dart';
@@ -13,7 +15,9 @@ class UserCard extends StatelessWidget {
   final User user;
   final Function? onTap;
 
-  const UserCard(this.user, {Key? key, this.onTap}) : super(key: key);
+  UserCard(this.user, {Key? key, this.onTap}) : super(key: key);
+
+  final ProfileController profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +61,16 @@ class UserCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 15),
-            MyTextButton(
-              text: user.isFollowing ? 'Diikuti' : 'Ikuti',
-              isFullWidth: false,
-              isSmall: true,
-              isOutlined: user.isFollowing,
-              onPressed: onTap,
-            ),
+            if (user.id != profileController.user.value.id) ...[
+              SizedBox(width: 15),
+              MyTextButton(
+                text: user.isFollowing ? 'Diikuti' : 'Ikuti',
+                isFullWidth: false,
+                isSmall: true,
+                isOutlined: user.isFollowing,
+                onPressed: onTap,
+              ),
+            ],
           ],
         ),
       ),

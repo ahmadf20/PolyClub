@@ -31,8 +31,18 @@ class RoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (room == null) return Container();
 
-    bool isScheduled = (room?.isScheduled ?? false) &&
-        room!.startTime!.isAfter(DateTime.now());
+    bool isScheduled = (room!.isScheduled ?? false) &&
+        room!.startTime != null &&
+        DateTime(
+                room!.startTime!.year,
+                room!.startTime!.month,
+                room!.startTime!.day,
+                room!.startTime!.hour,
+                room!.startTime!.minute)
+            .isAfter(DateTime.now());
+
+    print(room!.name);
+    print(room!.startTime!.isAfter(DateTime.now()));
 
     return GestureDetector(
       onTap: showDetail

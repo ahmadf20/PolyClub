@@ -5,6 +5,7 @@ import 'package:poly_club/screens/profile/edit_profile_screen.dart';
 import 'package:poly_club/screens/settings/about_us_screen.dart';
 import 'package:poly_club/screens/settings/help_screen.dart';
 import 'package:poly_club/screens/topic/topic_list_screen.dart';
+import 'package:poly_club/screens/welcome_screen.dart';
 import 'package:poly_club/services/one_signal_service.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
 import 'package:poly_club/utils/url_launcher_config.dart';
@@ -103,7 +104,7 @@ class SettingScreen extends StatelessWidget {
                     onPressed: () async {
                       await SharedPrefs.logOut().then((res) {
                         OneSignalService.unsetUserId();
-                        if (res) Get.offAll(() => AuthScreen());
+                        if (res) Get.offAll(() => WelcomeScreen());
                       });
                     },
                   ),

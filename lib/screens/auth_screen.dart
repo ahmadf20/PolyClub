@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:poly_club/controllers/auth_controller.dart';
 import 'package:poly_club/values/colors.dart';
@@ -22,7 +23,7 @@ class AuthScreen extends StatelessWidget {
 
         return ScreenWrapper(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
+            padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -56,12 +57,40 @@ class AuthScreen extends StatelessWidget {
                       MyTextField(
                         label: 'Kata Sandi',
                         controller: s.passwordTC,
-                        obscureText: true,
-                        // suffixIcon: Icon(
-                        //   Icons.remove_red_eye_outlined,
-                        //   color: MyColors.darkGrey,
-                        // ),
+                        obscureText: !s.passwordVisible.value,
+                        suffixIcon: GestureDetector(
+                          onTap: () => s.passwordVisible.value =
+                              !s.passwordVisible.value,
+                          child: Icon(
+                            s.passwordVisible.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: s.passwordVisible.value
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                        ),
                       ),
+                      if (!isLogin) ...[
+                        SizedBox(height: 10),
+                        MyTextField(
+                          label: 'Konfirmasi Kata Sandi',
+                          controller: s.passwordConfirmTC,
+                          obscureText: !s.passwordConfirmVisible.value,
+                          suffixIcon: GestureDetector(
+                            onTap: () => s.passwordConfirmVisible.value =
+                                !s.passwordConfirmVisible.value,
+                            child: Icon(
+                              s.passwordConfirmVisible.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: s.passwordConfirmVisible.value
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
                       SizedBox(height: 35),
                       MyTextButton(
                           text: isLogin ? 'Masuk' : 'Daftar',

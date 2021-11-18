@@ -22,8 +22,15 @@ class ModalBottomSheetRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isScheduled = (room?.isScheduled ?? false) &&
-        room!.startTime!.isAfter(DateTime.now());
+    bool isScheduled = (room!.isScheduled ?? false) &&
+        room!.startTime != null &&
+        DateTime(
+                room!.startTime!.year,
+                room!.startTime!.month,
+                room!.startTime!.day,
+                room!.startTime!.hour,
+                room!.startTime!.minute)
+            .isAfter(DateTime.now());
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 10, 25, Const.bottomPaddingButton),

@@ -71,7 +71,10 @@ class TopicController extends GetxController {
   }
 
   void chooseTopic(bool isFromRegister) async {
-    if (selectedTopicIds.isEmpty) return;
+    if (selectedTopicIds.isEmpty) {
+      customBotToastText('Pilih minimal 1 topik');
+      return;
+    }
 
     Map<String, dynamic> data = {
       'topic1': null,
