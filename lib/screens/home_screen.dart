@@ -214,9 +214,7 @@ class HomeScreen extends StatelessWidget {
                         title: 'Rekomendasi',
                         textButton: 'Semua Room',
                         onPressed: () {
-                          Get.to(() => ListRoomScreen(
-                                type: RoomListType.all,
-                              ));
+                          Get.to(() => ListRoomScreen(type: RoomListType.all));
                         },
                       ),
                       roomController.isLoadingRecommendation.value

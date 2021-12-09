@@ -41,9 +41,6 @@ class RoomCard extends StatelessWidget {
                 room!.startTime!.minute)
             .isAfter(DateTime.now());
 
-    print(room!.name);
-    print(room!.startTime!.isAfter(DateTime.now()));
-
     return GestureDetector(
       onTap: showDetail
           ? null

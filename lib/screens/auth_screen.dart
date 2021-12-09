@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:poly_club/controllers/auth_controller.dart';
+import 'package:poly_club/screens/profile/reset_password_screen.dart';
 import 'package:poly_club/values/colors.dart';
 import 'package:poly_club/values/text_style.dart';
 import 'package:poly_club/widgets/buttons/my_text_button.dart';
@@ -71,6 +72,20 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (isLogin) ...[
+                        SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(ResetPasswordScreen());
+                          },
+                          child: Text(
+                            'Lupa kata sandi?',
+                            style: MyTextStyle.body2.copyWith(
+                              color: MyColors.darkGrey,
+                            ),
+                          ),
+                        ),
+                      ],
                       if (!isLogin) ...[
                         SizedBox(height: 10),
                         MyTextField(
@@ -95,11 +110,7 @@ class AuthScreen extends StatelessWidget {
                       MyTextButton(
                           text: isLogin ? 'Masuk' : 'Daftar',
                           onPressed: () {
-                            if (s.state == AuthState.login) {
-                              s.loginHandler();
-                            } else {
-                              s.registerHandler();
-                            }
+                            isLogin ? s.loginHandler() : s.registerHandler();
                           }),
                       SizedBox(height: 25),
                       Row(
