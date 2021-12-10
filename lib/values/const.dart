@@ -4,8 +4,9 @@ class Const {
   static String oneSignalAppId = '65da08cc-eef6-40eb-b171-b8b574982b7f';
 
   static String privacyPolicyUrl =
-      'https://polyclub-0.flycricket.io/privacy.html';
-  static String termsOfUseUrl = 'https://dhik.github.io/top_polyclub/ind.html';
+      'https://ahmadf20.github.io/polyclub_privacy/privacy.html';
+  static String termsOfUseUrl =
+      'https://ahmadf20.github.io/polyclub_privacy/terms.html';
 
   /// To avoid FAB overlapping
   static const double bottomPadding = 65;

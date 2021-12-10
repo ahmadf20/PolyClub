@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poly_club/controllers/help_controller.dart';
-import 'package:poly_club/values/colors.dart';
 import 'package:poly_club/widgets/loading_indicator.dart';
 import 'package:poly_club/widgets/page_title.dart';
 import '../../values/const.dart';

@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:poly_club/screens/profile/edit_profile_screen.dart';
 import 'package:poly_club/screens/settings/about_us_screen.dart';
 import 'package:poly_club/screens/settings/help_screen.dart';
+import 'package:poly_club/screens/settings/web_view.dart';
 import 'package:poly_club/screens/topic/topic_list_screen.dart';
 import 'package:poly_club/screens/welcome_screen.dart';
 import 'package:poly_club/services/one_signal_service.dart';
 import 'package:poly_club/utils/shared_preferences.dart';
-import 'package:poly_club/utils/url_launcher_config.dart';
 import 'package:poly_club/widgets/page_title.dart';
 import 'package:poly_club/widgets/section_header.dart';
 import '../../values/colors.dart';
@@ -16,7 +16,6 @@ import '../../widgets/buttons/my_text_button.dart';
 import '../../values/const.dart';
 import '../../values/text_style.dart';
 import '../../widgets/unfocus_wrapper.dart';
-import '../auth_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -88,13 +87,17 @@ class SettingScreen extends StatelessWidget {
                       title: 'Kebijakan Privasi',
                       icon: Icons.privacy_tip_outlined,
                       onTap: () {
-                        UrlLauncherConfig.open(Const.privacyPolicyUrl);
+                        Get.to(() => WebViewScreen(
+                            data: Const.privacyPolicyUrl,
+                            title: 'Kebijakan Privasi'));
                       }),
                   _ListTile(
                       title: 'Syarat dan Ketentuan',
                       icon: Icons.list_alt_rounded,
                       onTap: () {
-                        UrlLauncherConfig.open(Const.termsOfUseUrl);
+                        Get.to(() => WebViewScreen(
+                            data: Const.termsOfUseUrl,
+                            title: 'Syarat dan Ketentuan'));
                       }),
                   SizedBox(height: 50),
                   MyTextButton(
