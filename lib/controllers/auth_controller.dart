@@ -1,9 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
 import 'package:poly_club/services/API/topic_service.dart';
 import 'package:poly_club/services/one_signal_service.dart';
 import '../models/user_model.dart';
@@ -12,6 +9,7 @@ import '../screens/topic/topic_list_screen.dart';
 import '../services/API/user_services.dart';
 import '../utils/custom_bot_toast.dart';
 import '../utils/shared_preferences.dart';
+import 'package:get/get.dart';
 
 enum AuthState { login, register }
 
@@ -106,6 +104,11 @@ class AuthController extends GetxController {
         nameTC.text.isEmpty ||
         emailTC.text.isEmpty) {
       customBotToastText('Silakan isi semua form yang tersedia');
+      return;
+    }
+
+    if (!emailTC.text.isEmail) {
+      customBotToastText('Email tidak valid');
       return;
     }
 

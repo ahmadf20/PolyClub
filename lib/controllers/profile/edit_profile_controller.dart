@@ -70,6 +70,11 @@ class EditProfileController extends GetxController {
       return;
     }
 
+    if (!emailTC!.text.isEmail) {
+      customBotToastText('Email tidak valid');
+      return;
+    }
+
     // if (repassTC!.text != passTC!.text) {
     //   return;
     // }
