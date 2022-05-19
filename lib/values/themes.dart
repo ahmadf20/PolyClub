@@ -21,7 +21,7 @@ class MyTheme {
   );
 
   static SystemUiOverlayStyle mySystemUIOverlaySyle = SystemUiOverlayStyle(
-    systemNavigationBarColor: MyColors.canvas, // navigation bar color
+    systemNavigationBarColor: Colors.white, // navigation bar color
     systemNavigationBarDividerColor: MyColors.canvas,
     systemNavigationBarIconBrightness: Brightness.dark,
     statusBarIconBrightness: Brightness.dark,
